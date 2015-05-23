@@ -39,6 +39,8 @@ import android.content.res.Resources;
 import com.openatlas.hack.AndroidHack;
 import com.openatlas.hack.AssertionArrayException;
 import com.openatlas.hack.OpenAtlasHacks;
+import com.openatlas.log.AtlasLog;
+import com.openatlas.log.ILog;
 import com.openatlas.log.Logger;
 import com.openatlas.log.LoggerFactory;
 import com.openatlas.runtime.BundleLifecycleHandler;
@@ -50,6 +52,8 @@ import com.openatlas.runtime.FrameworkLifecycleHandler;
 import com.openatlas.runtime.InstrumentationHook;
 import com.openatlas.runtime.PackageLite;
 import com.openatlas.runtime.RuntimeVariables;
+import com.openatlas.util.AtlasMonitor;
+import com.openatlas.util.IMonitor;
 
 public class Atlas {
     protected static Atlas instance;
@@ -288,6 +292,13 @@ public class Atlas {
                 }
             }
         }
+    }
+    public void setLogger(ILog iLog) {
+        AtlasLog.setExternalLogger(iLog);
+    }
+
+    public void setMonitor(IMonitor iMonitor) {
+        AtlasMonitor.setExternalMonitor(iMonitor);
     }
 
     public void setClassNotFoundInterceptorCallback(
