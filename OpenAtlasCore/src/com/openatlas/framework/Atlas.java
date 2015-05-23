@@ -52,8 +52,6 @@ import com.openatlas.runtime.FrameworkLifecycleHandler;
 import com.openatlas.runtime.InstrumentationHook;
 import com.openatlas.runtime.PackageLite;
 import com.openatlas.runtime.RuntimeVariables;
-import com.openatlas.util.AtlasMonitor;
-import com.openatlas.util.IMonitor;
 
 public class Atlas {
     protected static Atlas instance;
@@ -297,9 +295,7 @@ public class Atlas {
         AtlasLog.setExternalLogger(iLog);
     }
 
-    public void setMonitor(IMonitor iMonitor) {
-        AtlasMonitor.setExternalMonitor(iMonitor);
-    }
+
 
     public void setClassNotFoundInterceptorCallback(
             ClassNotFoundInterceptorCallback classNotFoundInterceptorCallback) {
