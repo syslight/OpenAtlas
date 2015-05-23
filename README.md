@@ -9,7 +9,6 @@ OpenAtlas ,a Android Component Plugin Framework<br>The MIT License (MIT) Copyrig
 ### Contributors
 [achellies](https://github.com/achellies)<br>
 [BunnyBlue](https://github.com/bunnyblue)<br>
-[SuperSanders](https://github.com/SuperSanders)<br>
 
 ## plugin start
 download aapt from repo,and  you should use build-tool version 22.x.x,
