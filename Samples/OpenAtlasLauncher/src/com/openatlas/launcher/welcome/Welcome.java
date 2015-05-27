@@ -23,14 +23,14 @@ package com.openatlas.launcher.welcome;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 
-import com.openatlas.android.lifecycle.BaseActivity;
 import com.openatlas.boot.Globals;
 import com.openatlas.launcher.R;
 
 
 
-public class Welcome extends BaseActivity {
+public class Welcome extends ActionBarActivity {
 	WelcomeFragment mFragment;
     public static boolean isAtlasDexopted() {
         PackageInfo packageInfo = null;
