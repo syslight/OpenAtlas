@@ -31,6 +31,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
@@ -39,7 +40,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.SynchronousBundleListener;
 
-import com.openatlas.boot.PlatformConfigure;
 import com.openatlas.framework.Framework.ServiceListenerEntry;
 import com.openatlas.log.Logger;
 import com.openatlas.log.LoggerFactory;
@@ -235,14 +235,14 @@ public class BundleContextImpl implements BundleContext {
                 ServiceReference serviceReference2;
                 int i3;
                 Integer num = (Integer) serviceReferenceArr[i2]
-                        .getProperty(PlatformConfigure.SERVICE_RANKING);
+                        .getProperty(Constants.SERVICE_RANKING);
                 if (num != null) {
                     intValue = num.intValue();
                 } else {
                     intValue = 0;
                 }
                 long longValue = ((Long) serviceReferenceArr[i2]
-                        .getProperty(PlatformConfigure.SERVICE_ID)).longValue();
+                        .getProperty(Constants.SERVICE_ID)).longValue();
                 if (intValue > i || (intValue == i && longValue < j)) {
                     serviceReference2 = serviceReferenceArr[i2];
                     i3 = intValue;

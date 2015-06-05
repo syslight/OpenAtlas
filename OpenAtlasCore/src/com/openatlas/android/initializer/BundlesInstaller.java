@@ -42,7 +42,6 @@ import android.os.StatFs;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.openatlas.boot.PlatformConfigure;
 import com.openatlas.framework.Atlas;
 import com.openatlas.framework.AtlasConfig;
 import com.openatlas.runtime.RuntimeVariables;
@@ -90,7 +89,7 @@ public class BundlesInstaller {
             ZipFile zipFile = null;
             try {
                 zipFile = new ZipFile(this.mApplication.getApplicationInfo().sourceDir);
-                List<String> bundleList = fetchBundleFileList(zipFile, "lib/"+PlatformConfigure.PRELOAD_DIR+"/libcom_", ".so");
+                List<String> bundleList = fetchBundleFileList(zipFile, "lib/"+AtlasConfig.PRELOAD_DIR+"/libcom_", ".so");
 				if (bundleList != null && bundleList.size() > 0 && getAvailableSize() < (((bundleList.size() * 2) * 4096) * 4096)) {
 				    new Handler(Looper.getMainLooper()).post(new Runnable() {
 						@Override
