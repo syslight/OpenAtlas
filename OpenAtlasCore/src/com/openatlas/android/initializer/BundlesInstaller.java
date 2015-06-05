@@ -89,7 +89,7 @@ public class BundlesInstaller {
             ZipFile zipFile = null;
             try {
                 zipFile = new ZipFile(this.mApplication.getApplicationInfo().sourceDir);
-                List<String> bundleList = fetchBundleFileList(zipFile, "lib/armeabi/libcom_", ".so");
+                List<String> bundleList = fetchBundleFileList(zipFile, "lib/"+PlatformConfigure.PRELOAD_DIR+"/libcom_", ".so");
 				if (bundleList != null && bundleList.size() > 0 && getAvailableSize() < (((bundleList.size() * 2) * 4096) * 4096)) {
 				    new Handler(Looper.getMainLooper()).post(new Runnable() {
 						@Override
