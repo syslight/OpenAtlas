@@ -40,6 +40,7 @@ import com.openatlas.boot.Globals;
 import com.openatlas.boot.PlatformConfigure;
 import com.openatlas.bundleInfo.BundleInfoList;
 import com.openatlas.framework.Atlas;
+import com.openatlas.framework.AtlasConfig;
 import com.openatlas.framework.BundleImpl;
 import com.openatlas.framework.Framework;
 
@@ -73,7 +74,7 @@ public class ClassLoadFromBundle {
     }
 
     public static String getPackageNameFromEntryName(String pkgName) {
-    	String archive="lib/"+PlatformConfigure.PRELOAD_DIR+"/lib";
+    	String archive="lib/"+AtlasConfig.PRELOAD_DIR+"/lib";
         return pkgName.substring(
                 pkgName.indexOf(archive) + archive.length(),
                 pkgName.indexOf(".so")).replace("_", ".");
@@ -82,7 +83,7 @@ public class ClassLoadFromBundle {
     public static synchronized void resolveInternalBundles() {
         synchronized (ClassLoadFromBundle.class) {
             if (sInternalBundles == null || sInternalBundles.size() == 0) {
-                String str = "lib/"+PlatformConfigure.PRELOAD_DIR+"/libcom_";
+                String str = "lib/"+AtlasConfig.PRELOAD_DIR+"/libcom_";
                 String str2 = ".so";
                 List<String> arrayList = new ArrayList<String>();
                 try {
@@ -206,7 +207,7 @@ public class ClassLoadFromBundle {
             	Log.e(TAG, "file  not found " + file.getAbsolutePath()+" try install from Host");
             	ZipFile zipFile=null;
 				try {
-					String archiveName="lib/"+PlatformConfigure.PRELOAD_DIR+"/lib"+location.replaceAll("\\.", "_")+".so";
+					String archiveName="lib/"+AtlasConfig.PRELOAD_DIR+"/lib"+location.replaceAll("\\.", "_")+".so";
 					zipFile = new ZipFile(Globals.getApplication().getApplicationInfo().sourceDir);
 					  Atlas.getInstance().installBundle(location, zipFile.getInputStream(zipFile.getEntry(archiveName)));
 				} catch (IOException e) {

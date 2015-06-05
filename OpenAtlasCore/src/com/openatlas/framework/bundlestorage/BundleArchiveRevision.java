@@ -43,9 +43,9 @@ import android.content.res.AssetManager;
 import android.os.Build;
 import android.text.TextUtils;
 
-import com.openatlas.boot.PlatformConfigure;
 import com.openatlas.bundleInfo.BundleInfoList;
 import com.openatlas.dexopt.InitExecutor;
+import com.openatlas.framework.AtlasConfig;
 import com.openatlas.framework.Framework;
 import com.openatlas.hack.OpenAtlasHacks;
 import com.openatlas.log.Logger;
@@ -358,7 +358,7 @@ public class BundleArchiveRevision {
 			while (entries.hasMoreElements()) {
 				ZipEntry zipEntry = (ZipEntry) entries.nextElement();
 				String name = zipEntry.getName();
-				String str = PlatformConfigure.PRELOAD_DIR;
+				String str = AtlasConfig.PRELOAD_DIR;
 				if (Build.CPU_ABI.contains("x86")) {
 					str = "x86";
 				}

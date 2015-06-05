@@ -44,6 +44,7 @@ import java.util.jar.Manifest;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 
 import com.openatlas.boot.PlatformConfigure;
 import com.openatlas.framework.bundlestorage.Archive;
@@ -168,16 +169,16 @@ public final class BundleClassLoader extends ClassLoader {
 			mainAttributes = new Attributes();
 		}
 		checkEE(readProperty(mainAttributes,
-				PlatformConfigure.BUNDLE_REQUIREDEXECUTIONENVIRONMENT),
+				Constants.BUNDLE_REQUIREDEXECUTIONENVIRONMENT),
 				splitString(System
-						.getProperty(PlatformConfigure.FRAMEWORK_EXECUTIONENVIRONMENT)));
-		this.exports = readProperty(mainAttributes, PlatformConfigure.EXPORT_PACKAGE);
-		this.imports = readProperty(mainAttributes, PlatformConfigure.IMPORT_PACKAGE);
+						.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT)));
+		this.exports = readProperty(mainAttributes, Constants.EXPORT_PACKAGE);
+		this.imports = readProperty(mainAttributes, Constants.IMPORT_PACKAGE);
 		this.dynamicImports = readProperty(mainAttributes,
-				PlatformConfigure.DYNAMICIMPORT_PACKAGE);
-		this.requires = readProperty(mainAttributes, PlatformConfigure.REQUIRE_BUNDLE);
+				Constants.DYNAMICIMPORT_PACKAGE);
+		this.requires = readProperty(mainAttributes, Constants.REQUIRE_BUNDLE);
 		this.activatorClassName = mainAttributes
-				.getValue(PlatformConfigure.BUNDLE_ACTIVATOR);
+				.getValue(Constants.BUNDLE_ACTIVATOR);
 		Hashtable<String, String> hashtable = new Hashtable<String, String>(mainAttributes.size());
 		Object[] toArray = mainAttributes.keySet().toArray(
 				new Object[mainAttributes.keySet().size()]);

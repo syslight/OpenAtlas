@@ -41,11 +41,11 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
+import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 
-import com.openatlas.boot.PlatformConfigure;
 import com.openatlas.framework.bundlestorage.Archive;
 import com.openatlas.framework.bundlestorage.BundleArchive;
 import com.openatlas.log.Logger;
@@ -381,7 +381,7 @@ public final class BundleImpl implements Bundle {
 
     @Override
 	public synchronized void update() throws BundleException {
-        String str = this.headers.get(PlatformConfigure.BUNDLE_UPDATELOCATION);
+        String str = this.headers.get(Constants.BUNDLE_UPDATELOCATION);
         try {
             String str2;
             if (str == null) {

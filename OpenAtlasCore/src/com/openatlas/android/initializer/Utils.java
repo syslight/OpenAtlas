@@ -37,6 +37,7 @@ import android.content.pm.PackageInfo;
 import android.util.Log;
 
 import com.openatlas.boot.PlatformConfigure;
+import com.openatlas.framework.AtlasConfig;
 
 
 
@@ -44,14 +45,14 @@ public class Utils {
 
 	/****从压缩包证获取Bundle的文件名称***/
 	public static String getFileNameFromEntryName(String entryName) {
-		String  local="lib/"+PlatformConfigure.PRELOAD_DIR+"/";
+		String  local="lib/"+AtlasConfig.PRELOAD_DIR+"/";
 		return entryName.substring(entryName.indexOf(local) + local.length());
 	}
 	/***从压缩包中获取插件的报名
 	 * @param entryName Bundle在压缩包中的路径
 	 * ****/
 	public static String getPackageNameFromEntryName(String entryName) {
-		String local="lib/"+PlatformConfigure.PRELOAD_DIR+"/lib";
+		String local="lib/"+AtlasConfig.PRELOAD_DIR+"/lib";
 		return entryName.substring(entryName.indexOf(local) + local.length(), entryName.indexOf(".so")).replace("_", ".");
 	}
 	/******从动态库中解析Bundle名称<br> 例如libcom_myapp_app1.so******/

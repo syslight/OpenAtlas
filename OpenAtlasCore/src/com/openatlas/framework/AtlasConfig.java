@@ -30,4 +30,7 @@ public class AtlasConfig {
 	public static  String[] DELAY = new String[]{};
 	public static  String[] AUTO = new String[]{};
 	public static  String[] STORE = new String[]{};
+
+	/**plugin preload  dir ******/
+	public static  String PRELOAD_DIR="armeabi";
 }

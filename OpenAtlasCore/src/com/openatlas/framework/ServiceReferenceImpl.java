@@ -30,11 +30,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-
-import com.openatlas.boot.PlatformConfigure;
 
 final class ServiceReferenceImpl implements ServiceReference {
     private static final HashSet<String> forbidden;
@@ -113,8 +112,8 @@ final class ServiceReferenceImpl implements ServiceReference {
     static {
         nextServiceID = 0;
         forbidden = new HashSet();
-        forbidden.add(PlatformConfigure.SERVICE_ID.toLowerCase(Locale.US));
-        forbidden.add(PlatformConfigure.OBJECTCLASS.toLowerCase(Locale.US));
+        forbidden.add(Constants.SERVICE_ID.toLowerCase(Locale.US));
+        forbidden.add(Constants.OBJECTCLASS.toLowerCase(Locale.US));
     }
 
     ServiceReferenceImpl(Bundle bundle, Object service,
@@ -138,15 +137,15 @@ final class ServiceReferenceImpl implements ServiceReference {
                 this.properties.put(str, properties.get(str));
             }
         }
-        this.properties.put(PlatformConfigure.OBJECTCLASS, clazzes);
+        this.properties.put(Constants.OBJECTCLASS, clazzes);
         Dictionary<String, Object> dictionary2 = this.properties;
-        String str2 = PlatformConfigure.SERVICE_ID;
+        String str2 = Constants.SERVICE_ID;
         long j = nextServiceID + 1;
         nextServiceID = j;
         dictionary2.put(str2, Long.valueOf(j));
         Integer num = properties == null ? null : (Integer) properties
-                .get(PlatformConfigure.SERVICE_RANKING);
-        this.properties.put(PlatformConfigure.SERVICE_RANKING,
+                .get(Constants.SERVICE_RANKING);
+        this.properties.put(Constants.SERVICE_RANKING,
                 Integer.valueOf(num == null ? 0 : num.intValue()));
         this.registration = new ServiceRegistrationImpl();
     }
@@ -263,7 +262,7 @@ final class ServiceReferenceImpl implements ServiceReference {
                             .getService(bundle, this.registration);
                     checkService(service,
                             (String[]) this.properties
-                                    .get(PlatformConfigure.OBJECTCLASS));
+                                    .get(Constants.OBJECTCLASS));
                     this.cachedServices.put(bundle, service);
                     return service;
                 } catch (Throwable e) {
