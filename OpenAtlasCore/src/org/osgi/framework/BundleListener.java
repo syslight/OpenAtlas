@@ -33,7 +33,6 @@ import java.util.EventListener;
  * unresolved, or uninstalled.
  * 
  * @see BundleEvent
- * @NotThreadSafe
  * @version $Revision: 5673 $
  */
 

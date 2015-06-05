@@ -245,10 +245,10 @@ public final class PackagePermission extends BasicPermission
      * for the list of the target object to imply the target <tt>PackagePermission</tt> action.
      * <p>The permission to export a package implies the permission to import the named package.
      * <pre>
-     * x.y.*,"export" -> x.y.z,"export" is true
-     * *,"import" -> x.y, "import"      is true
-     * *,"export" -> x.y, "import"      is true
-     * x.y,"export" -> x.y.z, "export"  is false
+     * x.y.*,"export" to x.y.z,"export" is true
+     * *,"import" to x.y, "import"      is true
+     * *,"export" to x.y, "import"      is true
+     * x.y,"export" to x.y.z, "export"  is false
      * </pre>
      *
      * @param p The target permission to interrogate.

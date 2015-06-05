@@ -43,14 +43,8 @@ import java.util.EventListener;
  * appropriate <code>ServicePermission</code> to get the service using at
  * least one of the named classes under which the service was registered.
  * 
- * <p>
- * <code>ServiceEvent</code> object delivery to <code>ServiceListener</code>
- * objects is further filtered according to package sources as defined in
- * {@link ServiceReference#isAssignableTo(Bundle, String)}.
- * 
  * @see ServiceEvent
  * @see ServicePermission
- * @ThreadSafe
  * @version $Revision: 5673 $
  */
 

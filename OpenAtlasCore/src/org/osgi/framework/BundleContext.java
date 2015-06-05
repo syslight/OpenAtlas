@@ -73,7 +73,6 @@ import com.openatlas.boot.PlatformConfigure;
  * The Framework is the only entity that can create <code>BundleContext</code>
  * objects and they are only valid within the Framework that created them.
  * 
- * @ThreadSafe
  * @version $Revision: 6781 $
  */
 
@@ -228,7 +227,7 @@ public interface BundleContext {
 	 * <p>
 	 * The listener is called if the filter criteria is met. To filter based
 	 * upon the class of the service, the filter should reference the
-	 * {@link OBJECTCLASS} property. If <code>filter</code> is
+	 *  OBJECTCLASS property. If <code>filter</code> is
 	 * <code>null</code>, all services are considered to match the filter.
 	 * 
 	 * <p>
@@ -380,8 +379,7 @@ public interface BundleContext {
 	 * array of <code>ServiceReference</code> objects contains services that
 	 * were registered under the specified class, match the specified filter
 	 * expression, and the packages for the class names under which the services
-	 * were registered match the context bundle's packages as defined in
-	 * {@link ServiceReference#isAssignableTo(Bundle, String)}.
+	 * were registered match the context bundle's packages 
 	 * 
 	 * <p>
 	 * The list is valid at the time of the call to this method. However since
@@ -406,14 +404,14 @@ public interface BundleContext {
 	 * <code>null</code>, the service must have been registered with the
 	 * specified class name. The complete list of class names with which a
 	 * service was registered is available from the service's
-	 * {@link OBJECTCLASS objectClass} property.
+	 *  OBJECTCLASS  property.
 	 * <li>If the specified <code>filter</code> is not <code>null</code>, the
 	 * filter expression must match the service.
 	 * <li>If the Java Runtime Environment supports permissions, the caller must
 	 * have <code>ServicePermission</code> with the <code>GET</code> action for
 	 * at least one of the class names under which the service was registered.
 	 * <li>For each class name with which the service was registered, calling
-	 * {@link ServiceReference#isAssignableTo(Bundle, String)} with the context
+	 * ServiceReference.isAssignableTo(Bundle, String) with the context
 	 * bundle and the class name on the service's <code>ServiceReference</code>
 	 * object must return <code>true</code>
 	 * </ul>
@@ -450,10 +448,10 @@ public interface BundleContext {
 	 * specified class.
 	 * <p>
 	 * If multiple such services exist, the service with the highest ranking (as
-	 * specified in its {@link SERVICE_RANKING} property) is returned.
+	 * specified in its SERVICE_RANKING property) is returned.
 	 * <p>
 	 * If there is a tie in ranking, the service with the lowest service ID (as
-	 * specified in its {@link SERVICE_ID} property); that is, the
+	 * specified in its  SERVICE_ID property); that is, the
 	 * service that was registered first is returned.
 	 * 
 	 * @param clazz The class name with which the service was registered.
@@ -501,7 +499,7 @@ public interface BundleContext {
 	 * is not an <code>instanceof</code> all the classes named when the service
 	 * was registered or the <code>ServiceFactory</code> object throws an
 	 * exception, <code>null</code> is returned and a Framework event of type
-	 * {@link FrameworkEvent#ERROR} containing a {@link ServiceException}
+	 * {@link FrameworkEvent#ERROR} containing a ServiceException
 	 * describing the error is fired.
 	 * <li>The service object for the service is returned.
 	 * </ol>
@@ -611,7 +609,6 @@ public interface BundleContext {
 	 * @throws NullPointerException If <code>filter</code> is null.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see "Framework specification for a description of the filter string syntax."
-	 * @see FrameworkUtil#createFilter(String)
 	 * @since 1.1
 	 */
 	public Filter createFilter(String filter) throws InvalidSyntaxException;
@@ -638,11 +635,11 @@ public interface BundleContext {
 	 * is not an <code>instanceof</code> all the specified class names.
 	 * <li>The Framework adds the following service properties to the service
 	 * properties from the specified <code>Dictionary</code> (which may be
-	 * <code>null</code>): <br/>
+	 * <code>null</code>): <br>
 	 * A property named {@link PlatformConfigure#SERVICE_ID} identifying the
-	 * registration number of the service <br/>
+	 * registration number of the service <br>
 	 * A property named {@link PlatformConfigure#OBJECTCLASS} containing all the
-	 * specified classes. <br/>
+	 * specified classes. <br>
 	 * Properties with these names in the specified <code>Dictionary</code> will
 	 * be ignored.
 	 * <li>The service is added to the Framework service registry and may now be

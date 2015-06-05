@@ -30,7 +30,6 @@ import java.util.EventObject;
  * <p>
  * OSGi Alliance reserves the right to extend the set of event types.
  * 
- * @Immutable
  * @see FrameworkListener
  * @version $Revision: 6542 $
  */

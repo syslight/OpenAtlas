@@ -31,7 +31,6 @@ import android.util.Base64;
  * Represents the manifest digest for a package. This is suitable for comparison
  * of two packages to know whether the manifests are identical.
  *
- * @hide
  */
 public class ManifestDigest {
     /** The digest of the manifest in our preferred order. */

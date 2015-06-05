@@ -123,12 +123,11 @@ artifacts {
 
 // Bintray
 Properties properties = new Properties()
-if(file('local.properties')!=null&&file('local.properties').exists())
-{
+if(file(project.rootDir.getAbsolutePath()+File.separator+'local.properties').exists()){
   properties.load(project.rootProject.file('local.properties').newDataInputStream())
 }else{
 
-  println "local.properties not found"
+  println "local.properties not found ,disable deploy"
 }
 
 bintray {

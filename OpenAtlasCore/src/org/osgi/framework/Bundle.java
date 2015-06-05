@@ -17,14 +17,9 @@
 package org.osgi.framework;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Map;
-
-import junit.runner.Version;
 
 /**
  * An installed bundle in the Framework.
@@ -66,7 +61,6 @@ import junit.runner.Version;
  * <code>Bundle</code> objects, and these objects are only valid within the
  * Framework that created them.
  * 
- * @ThreadSafe
  * @version $Revision: 6906 $
  */
 public interface Bundle {
@@ -131,7 +125,7 @@ public interface Bundle {
 	 * 
 	 * <p>
 	 * A bundle is in the <code>STARTING</code> state when its
-	 * {@link #start(int) start} method is active. A bundle must be in this
+	 * {@link #start() start} method is active. A bundle must be in this
 	 * state when the bundle's {@link BundleActivator#start} is called. If the
 	 * <code>BundleActivator.start</code> method completes without exception,
 	 * then the bundle has successfully started and must move to the
@@ -151,7 +145,7 @@ public interface Bundle {
 	 * 
 	 * <p>
 	 * A bundle is in the <code>STOPPING</code> state when its
-	 * {@link #stop(int) stop} method is active. A bundle must be in this state
+	 * {@link #stop() stop} method is active. A bundle must be in this state
 	 * when the bundle's {@link BundleActivator#stop} method is called. When the
 	 * <code>BundleActivator.stop</code> method completes the bundle is
 	 * stopped and must move to the <code>RESOLVED</code> state.
@@ -176,13 +170,13 @@ public interface Bundle {
 	 * setting of the bundle is not modified.
 	 * 
 	 * <p>
-	 * This bit may be set when calling {@link #start(int)} to notify the
+	 * This bit may be set when calling {@link #start()} to notify the
 	 * framework that the autostart setting of the bundle must not be modified.
 	 * If this bit is not set, then the autostart setting of the bundle is
 	 * modified.
 	 * 
 	 * @since 1.4
-	 * @see #start(int)
+	 * @see #start()
 	 */
 	public static final int	START_TRANSIENT			= 0x00000001;
 
@@ -192,13 +186,13 @@ public interface Bundle {
 	 * {@link Constants#BUNDLE_ACTIVATIONPOLICY activation policy}.
 	 * 
 	 * <p>
-	 * This bit may be set when calling {@link #start(int)} to notify the
+	 * This bit may be set when calling {@link #start()} to notify the
 	 * framework that the bundle must be activated using the bundle's declared
 	 * activation policy.
 	 * 
 	 * @since 1.4
 	 * @see Constants#BUNDLE_ACTIVATIONPOLICY
-	 * @see #start(int)
+	 * @see #start()
 	 */
 	public static final int	START_ACTIVATION_POLICY	= 0x00000002;
 
@@ -207,13 +201,13 @@ public interface Bundle {
 	 * bundle is not modified.
 	 * 
 	 * <p>
-	 * This bit may be set when calling {@link #stop(int)} to notify the
+	 * This bit may be set when calling {@link #stop()} to notify the
 	 * framework that the autostart setting of the bundle must not be modified.
 	 * If this bit is not set, then the autostart setting of the bundle is
 	 * modified.
 	 * 
 	 * @since 1.4
-	 * @see #stop(int)
+	 * @see #stop()
 	 */
 	public static final int	STOP_TRANSIENT			= 0x00000001;
 
@@ -221,7 +215,6 @@ public interface Bundle {
 	 * Request that all certificates used to sign the bundle be returned.
 	 * 
 	 * @since 1.5
-	 * @see #getSignerCertificates(int)
 	 */
 	public final static int	SIGNERS_ALL				= 1;
 
@@ -230,7 +223,6 @@ public interface Bundle {
 	 * by the framework be returned.
 	 * 
 	 * @since 1.5
-	 * @see #getSignerCertificates(int)
 	 */
 	public final static int	SIGNERS_TRUSTED			= 2;
 
@@ -261,7 +253,7 @@ public interface Bundle {
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
 	 *         Environment supports permissions.
-	 * @see #start(int)
+	 * @see #start()
 	 */
 	public void start() throws BundleException;
 
@@ -279,7 +271,7 @@ public interface Bundle {
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         <code>AdminPermission[this,EXECUTE]</code>, and the Java Runtime
 	 *         Environment supports permissions.
-	 * @see #start(int)
+	 * @see #start()
 	 */
 	public void stop() throws BundleException;
 
@@ -645,8 +637,6 @@ public interface Bundle {
 	 *         <code>AdminPermission[this,RESOURCE]</code>, and the Java Runtime
 	 *         Environment supports permissions.
 	 * @throws IllegalStateException If this bundle has been uninstalled.
-	 * @see #getEntry
-	 * @see #findEntries
 	 * @since 1.1
 	 */
 	public URL getResource(String name);

@@ -286,7 +286,7 @@ final public class ServicePermission extends BasicPermission
 
     /**
      * Returns a new <tt>PermissionCollection</tt> object for storing
-     * <tt>ServicePermission<tt> objects.
+     * <tt>ServicePermission</tt> objects.
      *
      * @return A new <tt>PermissionCollection</tt> object suitable for storing
      * <tt>ServicePermission</tt> objects.

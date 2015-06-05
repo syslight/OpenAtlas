@@ -35,7 +35,12 @@ import com.openatlas.boot.Globals;
 import com.openatlas.boot.PlatformConfigure;
 
 public class BootApp extends AtlasApp {
-
+static{
+	
+	PlatformConfigure.DELAY = new String[]{"com.openatlas.qrcode"};
+	PlatformConfigure.AUTO = new String[]{"com.openatlas.homelauncher","com.openatlas.qrcode","com.openatlas.android.game2","com.taobao.universalimageloader.sample0x6a"};
+	PlatformConfigure.STORE = new String[]{"com.openatlas.android.appcenter","com.taobao.universalimageloader.sample0x6a"};
+}
 
 	static final String TAG = "TestApp";
 
