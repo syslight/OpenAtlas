@@ -34,7 +34,6 @@ import java.util.EventListener;
  * asynchronous errors occur.
  * 
  * @see FrameworkEvent
- * @NotThreadSafe
  * @version $Revision: 5673 $
  */
 

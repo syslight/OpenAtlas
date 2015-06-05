@@ -45,7 +45,6 @@ package org.osgi.framework;
  * may concurrently call a <code>ServiceFactory</code>.
  * 
  * @see BundleContext#getService
- * @ThreadSafe
  * @version $Revision: 5967 $
  */
 

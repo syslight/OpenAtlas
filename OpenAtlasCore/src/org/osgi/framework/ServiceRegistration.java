@@ -31,7 +31,6 @@ import java.util.Dictionary;
  * properties of the service or to unregister the service.
  * 
  * @see BundleContext#registerService(String[],Object,Dictionary)
- * @ThreadSafe
  * @version $Revision: 6361 $
  */
 
@@ -54,7 +53,7 @@ public interface ServiceRegistration {
 	 * Updates the properties associated with a service.
 	 * 
 	 * <p>
-	 * The {@link Constants#OBJECTCLASS} and {@link Constants#SERVICE_ID} keys
+	 * The {@link org.osgi.framework.Constants#OBJECTCLASS} and {@link org.osgi.framework.Constants#SERVICE_ID} keys
 	 * cannot be modified by this method. These values are set by the Framework
 	 * when the service is registered in the OSGi environment.
 	 * 
@@ -65,8 +64,7 @@ public interface ServiceRegistration {
 	 * <li>A service event of type {@link ServiceEvent#MODIFIED} is fired.
 	 * </ol>
 	 * 
-	 * @param properties The properties for this service. See {@link Constants}
-	 *        for a list of standard service property keys. Changes should not
+	 * @param properties The properties for this service. Changes should not
 	 *        be made to this object after calling this method. To update the
 	 *        service's properties this method should be called again.
 	 * 

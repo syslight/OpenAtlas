@@ -409,7 +409,7 @@ public class InstrumentationHook extends Instrumentation {
 	 * @param token The token for this activity to communicate with
 	 * @param application The application object (if any)
 	 * @param intent The intent that started this Activity
-	 * @param info ActivityInfo from the manifest
+	 * @param activityInfo ActivityInfo from the manifest
 	 * @param title The title, typically retrieved from the ActivityInfo record
 	 * @param parent The parent Activity (if any)
 	 * @param id The embedded Id (if any)
@@ -827,7 +827,7 @@ public class InstrumentationHook extends Instrumentation {
 	 * Perform instantiation of the process's {@link Application} object.  The
 	 * default implementation provides the normal system behavior.
 	 * 
-	 * @param cl The ClassLoader with which to instantiate the object.
+	 * @param classLoader The ClassLoader with which to instantiate the object.
 	 * @param className The name of the class implementing the Application
 	 *                  object.
 	 * @param context The context to initialize the application with

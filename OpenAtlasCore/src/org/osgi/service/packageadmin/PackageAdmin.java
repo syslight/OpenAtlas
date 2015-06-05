@@ -14,7 +14,6 @@ public interface PackageAdmin {
 	 * 
 	 * @return The exported package, or <code>null</code> if no exported
 	 *         package with the specified name exists.
-	 * @see #getExportedPackages(String)
 	 */
 	public ExportedPackage getExportedPackage(String name);
 

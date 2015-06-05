@@ -21,7 +21,7 @@ import java.util.Dictionary;
  * An RFC 1960-based Filter.
  * <p>
  * <code>Filter</code>s can be created by calling
- * {@link BundleContext#createFilter} or {@link FrameworkUtil#createFilter} with
+ * {@link BundleContext#createFilter}with
  * a filter string.
  * <p>
  * A <code>Filter</code> can be used numerous times to determine if the match
@@ -39,7 +39,6 @@ import java.util.Dictionary;
  * 
  * @since 1.1
  * @see "Core Specification, section 5.5, for a description of the filter string syntax."
- * @ThreadSafe
  * @version $Revision: 6860 $
  */
 public interface Filter {

@@ -51,7 +51,7 @@ public class StringUtils {
     * StringUtils.isBlank("  bob  ") = false
     * </pre>
     *
-    * @param cs  the CharSequence to check, may be null
+    * @param str  the CharSequence to check, may be null
     * @return {@code true} if the CharSequence is null, empty or whitespace
     * @since 2.0
     * @since 3.0 Changed signature from isBlank(String) to isBlank(CharSequence)

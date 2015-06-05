@@ -30,9 +30,7 @@ import java.util.EventObject;
  * <p>
  * OSGi Alliance reserves the right to extend the set of types.
  * 
- * @Immutable
  * @see ServiceListener
- * @see AllServiceListener
  * @version $Revision: 6542 $
  */
 

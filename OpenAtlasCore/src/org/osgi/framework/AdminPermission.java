@@ -56,7 +56,6 @@ import java.util.NoSuchElementException;
  * </ul>
  * Filter attribute names are processed in a case sensitive manner.
  * 
- * @ThreadSafe
  * @version $Revision: 7743 $
  */
 public final class AdminPermission extends BasicPermission {
