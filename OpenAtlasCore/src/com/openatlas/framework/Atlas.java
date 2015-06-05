@@ -39,6 +39,8 @@ import android.content.res.Resources;
 import com.openatlas.hack.AndroidHack;
 import com.openatlas.hack.AssertionArrayException;
 import com.openatlas.hack.OpenAtlasHacks;
+import com.openatlas.log.AtlasLog;
+import com.openatlas.log.ILog;
 import com.openatlas.log.Logger;
 import com.openatlas.log.LoggerFactory;
 import com.openatlas.runtime.BundleLifecycleHandler;
@@ -61,8 +63,7 @@ public class Atlas {
         log = LoggerFactory.getInstance("Atlas");
     }
 
-    private Atlas() {
-    }
+
 
     public static  Atlas getInstance() {
       
@@ -290,9 +291,15 @@ public class Atlas {
             }
         }
     }
+    public void setLogger(ILog iLog) {
+        AtlasLog.setExternalLogger(iLog);
+    }
+
+
 
     public void setClassNotFoundInterceptorCallback(
             ClassNotFoundInterceptorCallback classNotFoundInterceptorCallback) {
         Framework.setClassNotFoundCallback(classNotFoundInterceptorCallback);
     }
+
 }
