@@ -12,7 +12,6 @@ Branch Status[![Build Status](https://travis-ci.org/bunnyblue/OpenAtlas.svg?bran
 ### Contributors
 [achellies](https://github.com/achellies)<br>
 [BunnyBlue](https://github.com/bunnyblue)<br>
-[SuperSanders](https://github.com/SuperSanders)<br>
 
 ## plugin start
 download aapt from repo,and  you should use build-tool version 22.x.x,
