@@ -18,9 +18,16 @@ PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
 FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 @author BunnyBlue
- * **/
+* **/
+package com.openatlas.framework;
+
 /**
  * @author BunnyBlue
  *
  */
-package com.openAtlas.launcher;
+public class AtlasConfig {
+	/***延时启动配*****/
+	public static  String[] DELAY = new String[]{};
+	public static  String[] AUTO = new String[]{};
+	public static  String[] STORE = new String[]{};
+}
