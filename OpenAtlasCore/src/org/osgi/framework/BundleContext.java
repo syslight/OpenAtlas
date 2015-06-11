@@ -20,8 +20,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Dictionary;
 
-import com.openatlas.boot.PlatformConfigure;
-
 
 
 
@@ -636,9 +634,9 @@ public interface BundleContext {
 	 * <li>The Framework adds the following service properties to the service
 	 * properties from the specified <code>Dictionary</code> (which may be
 	 * <code>null</code>): <br>
-	 * A property named {@link PlatformConfigure#SERVICE_ID} identifying the
+	 * A property named {@link Constants#SERVICE_ID} identifying the
 	 * registration number of the service <br>
-	 * A property named {@link PlatformConfigure#OBJECTCLASS} containing all the
+	 * A property named {@link Constants#OBJECTCLASS} containing all the
 	 * specified classes. <br>
 	 * Properties with these names in the specified <code>Dictionary</code> will
 	 * be ignored.
@@ -651,12 +649,12 @@ public interface BundleContext {
 	 * 
 	 * @param clazzes The class names under which the service can be located.
 	 *        The class names in this array will be stored in the service's
-	 *        properties under the key {@link PlatformConfigure#OBJECTCLASS}.
+	 *        properties under the key {@link Constants#OBJECTCLASS}.
 	 * @param service The service object or a <code>ServiceFactory</code>
 	 *        object.
 	 * @param properties The properties for this service. The keys in the
 	 *        properties object must all be <code>String</code> objects. See
-	 *        {@link PlatformConfigure} for a list of standard service property keys.
+	 *        {@link Constants} for a list of standard service property keys.
 	 *        Changes should not be made to this object after calling this
 	 *        method. To update the service's properties the
 	 *        {@link ServiceRegistration#setProperties} method must be called.
@@ -692,7 +690,7 @@ public interface BundleContext {
 	 * {@link #registerService(String[], Object, Dictionary)} and is provided as
 	 * a convenience when <code>service</code> will only be registered under a
 	 * single class name. Note that even in this case the value of the service's
-	 * {@link PlatformConfigure#OBJECTCLASS} property will be an array of string, rather
+	 * {@link Constants#OBJECTCLASS} property will be an array of string, rather
 	 * than just a single string.
 	 * 
 	 * @param clazz The class name under which the service can be located.

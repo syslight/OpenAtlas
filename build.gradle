@@ -9,3 +9,8 @@ buildscript {
         classpath 'com.github.dcendents:android-maven-plugin:1.2'
     }
 }
+allprojects{
+  repositories {
+      jcenter()
+  }
+}
