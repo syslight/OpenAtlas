@@ -1,8 +1,26 @@
 apply plugin: 'com.android.application'
 
+
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':OpenAtlasCore')
+
+    Properties properties = new Properties()
+    if(file(project.rootDir.getAbsolutePath()+File.separator+'local.properties').exists()){
+      properties.load(project.rootProject.file('local.properties').newDataInputStream())
+      if("bunnyblue".equals(properties.getProperty("bintray.user"))){
+        compile  project(':OpenAtlasCore')
+      }else{
+        compile ('com.openatlas:OpenAtlasCore:0.3.+' )
+
+      }
+    }else{
+      compile ('com.openatlas:OpenAtlasCore:0.3.+' )
+
+    }
+
+
+
+
 }
 
 android {
