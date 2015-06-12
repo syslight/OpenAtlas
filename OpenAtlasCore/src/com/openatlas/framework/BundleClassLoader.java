@@ -41,7 +41,6 @@ import java.util.StringTokenizer;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -57,8 +56,10 @@ public final class BundleClassLoader extends ClassLoader {
 	private static final List<URL> EMPTY_LIST;
 	static final HashSet<String> FRAMEWORK_PACKAGES;
 	static final Logger log;
-	BundleActivator activator;
-	String activatorClassName;
+	// @Deprecated
+	// BundleActivator activator;
+	// @Deprecated
+	// String activatorClassName;
 	final Archive archive;
 	BundleImpl bundle;
 	private String[] dynamicImports;
@@ -138,8 +139,8 @@ public final class BundleClassLoader extends ClassLoader {
 		this.exports = new String[0];
 		this.imports = new String[0];
 		this.requires = new String[0];
-		this.activatorClassName = null;
-		this.activator = null;
+		// this.activatorClassName = null;
+		// this.activator = null;
 		this.dynamicImports = null;
 		this.originalExporter = null;
 		this.bundle = bundleImpl;
@@ -177,8 +178,8 @@ public final class BundleClassLoader extends ClassLoader {
 		this.dynamicImports = readProperty(mainAttributes,
 				Constants.DYNAMICIMPORT_PACKAGE);
 		this.requires = readProperty(mainAttributes, Constants.REQUIRE_BUNDLE);
-		this.activatorClassName = mainAttributes
-				.getValue(Constants.BUNDLE_ACTIVATOR);
+		// this.activatorClassName = mainAttributes
+		// .getValue(Constants.BUNDLE_ACTIVATOR);
 		Hashtable<String, String> hashtable = new Hashtable<String, String>(mainAttributes.size());
 		Object[] toArray = mainAttributes.keySet().toArray(
 				new Object[mainAttributes.keySet().size()]);
@@ -324,13 +325,13 @@ public final class BundleClassLoader extends ClassLoader {
 			}
 		}
 		this.importDelegations = null;
-		this.activator = null;
+		// this.activator = null;
 		this.originalExporter = null;
 		if (z) {
 			if (arrayList.size() == 0) {
 				this.bundle = null;
 			}
-			this.activatorClassName = null;
+			// this.activatorClassName = null;
 			this.imports = null;
 			this.dynamicImports = null;
 		}

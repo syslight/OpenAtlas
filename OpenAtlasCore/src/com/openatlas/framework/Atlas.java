@@ -39,7 +39,7 @@ import android.content.res.Resources;
 import com.openatlas.hack.AndroidHack;
 import com.openatlas.hack.AssertionArrayException;
 import com.openatlas.hack.OpenAtlasHacks;
-import com.openatlas.log.AtlasLog;
+import com.openatlas.log.OpenAtlasLog;
 import com.openatlas.log.ILog;
 import com.openatlas.log.Logger;
 import com.openatlas.log.LoggerFactory;
@@ -164,6 +164,10 @@ public class Atlas {
                 + ", because could not find it");
     }
 
+    public boolean restoreBundle(String[] packageNames) {
+     
+        return Framework.restoreBundle(packageNames);
+    }
     public void installOrUpdate(String[] packageNames, File[] bundleFiles)
             throws BundleException {
         Framework.installOrUpdate(packageNames, bundleFiles);
@@ -292,7 +296,7 @@ public class Atlas {
         }
     }
     public void setLogger(ILog iLog) {
-        AtlasLog.setExternalLogger(iLog);
+        OpenAtlasLog.setExternalLogger(iLog);
     }
 
 

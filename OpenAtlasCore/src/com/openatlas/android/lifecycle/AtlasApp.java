@@ -44,11 +44,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.openatlas.android.compat.AtlasCompat;
-import com.openatlas.android.initializer.AtlasInitializer;
+import com.openatlas.android.initializer.OpenAtlasInitializer;
 import com.openatlas.android.initializer.BundleParser;
 import com.openatlas.boot.Globals;
+import com.openatlas.framework.Framework;
 import com.openatlas.runtime.ContextImplHook;
-import com.openatlas.util.Utils;
 
 
 /****OpenAtlas 框架App的基类，用户的application需要集成此类****/
@@ -60,7 +60,7 @@ public class AtlasApp extends AtlasCompat {
     private WeakReference<Activity> mWeakActivity;
 	private Context mBaseContext;
 	private String processName;
-	AtlasInitializer mAtlasInitializer;
+	OpenAtlasInitializer mAtlasInitializer;
     public static interface CrossActivityLifecycleCallback {
         void onCreated(Activity activity);
 
@@ -211,7 +211,7 @@ public class AtlasApp extends AtlasCompat {
 				break;
 			}
 		}
-		this.mAtlasInitializer = new AtlasInitializer(this,getPackageName(), getApplicationContext());
+		this.mAtlasInitializer = new OpenAtlasInitializer(this,getPackageName(), getApplicationContext());
 		// this.mAtlasInitializer.injectApplication();
 		// initCrashHandlerAndSafeMode(this.mBaseContext);
 		this.mAtlasInitializer.init();
@@ -246,7 +246,7 @@ public class AtlasApp extends AtlasCompat {
 	}
 	@Override
 	public SQLiteDatabase openOrCreateDatabase(String str, int i, CursorFactory cursorFactory) {
-		String processName =Utils.getProcessName();
+		String processName =Framework.getCurrentProcessName();
 		if (!TextUtils.isEmpty(processName)) {
 			Log.i("SQLiteDatabase", processName);
 			if (!processName.equals(getPackageName())) {

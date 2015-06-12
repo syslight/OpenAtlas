@@ -25,11 +25,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import com.openatlas.hack.Hack.HackDeclaration.HackAssertionException;
-import com.openatlas.runtime.DelegateClassLoader;
-import com.openatlas.runtime.DelegateResources;
-import com.openatlas.runtime.RuntimeVariables;
-
 import android.app.Application;
 import android.app.Instrumentation;
 import android.content.ContextWrapper;
@@ -40,6 +35,11 @@ import android.os.Handler.Callback;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+
+import com.openatlas.hack.Hack.HackDeclaration.HackAssertionException;
+import com.openatlas.runtime.DelegateClassLoader;
+import com.openatlas.runtime.DelegateResources;
+import com.openatlas.runtime.RuntimeVariables;
 
 public class AndroidHack {
     private static Object _mLoadedApk;
@@ -196,7 +196,7 @@ public class AndroidHack {
             return null;
         }
         _mLoadedApk = weakReference.get();
-        return weakReference.get();
+		return _mLoadedApk;
     }
 
     public static Object createNewLoadedApk(Application application, Object obj) {

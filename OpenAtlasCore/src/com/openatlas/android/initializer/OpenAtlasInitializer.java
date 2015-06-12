@@ -51,7 +51,7 @@ import com.openatlas.bundleInfo.BundleListing;
 import com.openatlas.bundleInfo.BundleInfoList.BundleInfo;
 import com.openatlas.framework.Atlas;
 import com.openatlas.util.ApkUtils;
-public class AtlasInitializer {
+public class OpenAtlasInitializer {
 	private static long time;
 	private static boolean isAppPkg;
 	private Application mApp
@@ -68,7 +68,7 @@ public class AtlasInitializer {
 		time = 0;
 	}
 
-	public AtlasInitializer(Application application, String packageName, Context context) {
+	public OpenAtlasInitializer(Application application, String packageName, Context context) {
 	
 		this.init = true;
 		this.mApp = application;

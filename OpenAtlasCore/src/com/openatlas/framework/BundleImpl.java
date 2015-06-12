@@ -37,7 +37,6 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
@@ -51,7 +50,6 @@ import com.openatlas.framework.bundlestorage.BundleArchive;
 import com.openatlas.log.Logger;
 import com.openatlas.log.LoggerFactory;
 import com.openatlas.util.OpenAtlasFileLock;
-import com.openatlas.util.StringUtils;
 
 public final class BundleImpl implements Bundle {
     static final Logger log;
@@ -279,19 +277,20 @@ public final class BundleImpl implements Bundle {
             try {
      
                 this.context.isValid = true;
-                if (!(this.classloader.activatorClassName == null || StringUtils
-                        .isBlank(this.classloader.activatorClassName))) {
-                    Class<?> loadClass = this.classloader
-                            .loadClass(this.classloader.activatorClassName);
-                    if (loadClass == null) {
-                        throw new ClassNotFoundException(
-                                this.classloader.activatorClassName);
-                    }
-                    this.classloader.activator = (BundleActivator) loadClass
-                            .newInstance();
-                    this.classloader.activator.start(this.context);
-
-                }
+				// if (!(this.classloader.activatorClassName == null ||
+				// StringUtils
+				// .isBlank(this.classloader.activatorClassName))) {
+				// Class<?> loadClass = this.classloader
+				// .loadClass(this.classloader.activatorClassName);
+				// if (loadClass == null) {
+				// throw new ClassNotFoundException(
+				// this.classloader.activatorClassName);
+				// }
+				// this.classloader.activator = (BundleActivator) loadClass
+				// .newInstance();
+				// this.classloader.activator.start(this.context);
+				//
+				// }
                 this.state = BundleEvent.RESOLVED;
                 Framework.notifyBundleListeners(BundleEvent.STARTED, this);
                 if (Framework.DEBUG_BUNDLES && log.isInfoEnabled()) {
@@ -324,19 +323,19 @@ public final class BundleImpl implements Bundle {
         } else if (this.state == BundleEvent.RESOLVED) {
             this.state = BundleEvent.UNINSTALLED;
             try {
-                if (this.classloader.activator != null) {
-                    this.classloader.activator.stop(this.context);
-                }
+				// if (this.classloader.activator != null) {
+				// this.classloader.activator.stop(this.context);
+				// }
                 if (Framework.DEBUG_BUNDLES && log.isInfoEnabled()) {
                     log.info("Framework: Bundle " + toString() + " stopped.");
                 }
-                this.classloader.activator = null;
+				// this.classloader.activator = null;
                 Framework.clearBundleTrace(this);
                 this.state = BundleEvent.STOPPED;
                 Framework.notifyBundleListeners(BundleEvent.STOPPED, this);
                 this.context.isValid = false;
             } catch (Throwable th) {
-                this.classloader.activator = null;
+				// this.classloader.activator = null;
                 Framework.clearBundleTrace(this);
                 this.state = BundleEvent.STOPPED;
                 Framework.notifyBundleListeners(BundleEvent.STOPPED, this);
