@@ -23,16 +23,16 @@ package org.osgi.framework;
  * bundle is started or stopped. The Framework can create instances of a
  * bundle's <code>BundleActivator</code> as required. If an instance's
  * <code>BundleActivator.start</code> method executes successfully, it is
- * guaranteed that the same instance's <code>BundleActivator.stop</code>
- * method will be called when the bundle is to be stopped. The Framework must
- * not concurrently call a <code>BundleActivator</code> object.
+ * guaranteed that the same instance's <code>BundleActivator.stop</code> method
+ * will be called when the bundle is to be stopped. The Framework must not
+ * concurrently call a <code>BundleActivator</code> object.
  * 
  * <p>
  * <code>BundleActivator</code> is specified through the
  * <code>Bundle-Activator</code> Manifest header. A bundle can only specify a
  * single <code>BundleActivator</code> in the Manifest file. Fragment bundles
- * must not have a <code>BundleActivator</code>. The form of the Manifest
- * header is:
+ * must not have a <code>BundleActivator</code>. The form of the Manifest header
+ * is:
  * 
  * <p>
  * <code>Bundle-Activator: <i>class-name</i></code>
@@ -44,9 +44,13 @@ package org.osgi.framework;
  * constructor that takes no parameters so that a <code>BundleActivator</code>
  * object can be created by <code>Class.newInstance()</code>.
  * 
+ * remove next version <br>
+ * 
+ * @deprecated
  * @version $Revision: 6361 $
  */
 
+@Deprecated
 public interface BundleActivator {
 	/**
 	 * Called when this bundle is started so the Framework can perform the

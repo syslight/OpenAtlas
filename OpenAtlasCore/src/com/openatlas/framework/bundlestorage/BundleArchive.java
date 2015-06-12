@@ -21,6 +21,8 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 package com.openatlas.framework.bundlestorage;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -29,159 +31,204 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.jar.Manifest;
 
+import android.text.TextUtils;
+
 import com.openatlas.framework.Framework;
+import com.openatlas.runtime.RuntimeVariables;
 import com.openatlas.util.StringUtils;
 
 public class BundleArchive implements Archive {
-    public static final String REVISION_DIRECTORY = "version";
-    private File bundleDir;
-    private final BundleArchiveRevision currentRevision;
-    private final SortedMap<Long, BundleArchiveRevision> revisions;
+	public static final String REVISION_DIRECTORY = "version";
+	public static final String DEPRECATED_MARK = "deprecated";
+	private File bundleDir;
+	private final BundleArchiveRevision currentRevision;
+	private final SortedMap<Long, BundleArchiveRevision> revisions;
+	public BundleArchive(String location, File bundleDir) throws IOException {
+		this.revisions = new TreeMap<Long, BundleArchiveRevision>();
+		File[] listFiles = bundleDir.listFiles();
+		String currentProcessName = Framework.getCurrentProcessName();
+		if (listFiles != null) {
+			for (File file : listFiles) {
+				if (file.getName().startsWith(REVISION_DIRECTORY)) {
+					if (new File(file, DEPRECATED_MARK).exists()) {
+						try {
+							if (!TextUtils.isEmpty(currentProcessName) && currentProcessName.equals(RuntimeVariables.androidApplication.getPackageName())) {
+								for (File delete : file.listFiles()) {
+									delete.delete();
+								}
+								file.delete();
+							}
+						} catch (Exception e) {
+						}
+					} else {
+						long parseLong = Long.parseLong(StringUtils.substringAfter(file.getName(), "."));
+						if (parseLong > 0) {
+							this.revisions.put(Long.valueOf(parseLong), null);
+						}
+					}
+				}
+			}
+		}
+		if (this.revisions.isEmpty()) {
+			try {
+				if (!TextUtils.isEmpty(currentProcessName) && currentProcessName.equals(RuntimeVariables.androidApplication.getPackageName())) {
 
-    public BundleArchive(String location, File bundleDir) throws IOException {
-        this.revisions = new TreeMap<Long, BundleArchiveRevision>();
-        String[] list = bundleDir.list();
-        if (list != null) {
-            for (String str2 : list) {
-                if (str2.startsWith(REVISION_DIRECTORY)) {
-                    long parseLong = Long.parseLong(StringUtils.substringAfter(
-                            str2, "."));
-                    if (parseLong > 0) {
-                        this.revisions.put(Long.valueOf(parseLong), null);
-                    }
-                }
-            }
-        }
-        if (this.revisions.isEmpty()) {
-            throw new IOException(
-                    "No valid revisions in bundle archive directory: " + bundleDir);
-        }
-        this.bundleDir = bundleDir;
-        long longValue = this.revisions.lastKey().longValue();
-        BundleArchiveRevision bundleArchiveRevision = new BundleArchiveRevision(
-                location, longValue, new File(bundleDir, "version."
-                        + String.valueOf(longValue)));
-        this.revisions.put(Long.valueOf(longValue), bundleArchiveRevision);
-        this.currentRevision = bundleArchiveRevision;
-    }
+					for (File file : listFiles) {
+						file.delete();
+					}
 
-    public BundleArchive(String location, File bundleDir, InputStream inputStream)
-            throws IOException {
-        this.revisions = new TreeMap<Long, BundleArchiveRevision>();
-        this.bundleDir = bundleDir;
-        BundleArchiveRevision bundleArchiveRevision = new BundleArchiveRevision(
-                location, 1, new File(bundleDir, "version." + String.valueOf(1)),
-                inputStream);
-        this.revisions.put(Long.valueOf(1), bundleArchiveRevision);
-        this.currentRevision = bundleArchiveRevision;
-    }
+					bundleDir.delete();
+				}
+			} catch (Exception e2) {
+			}
+			throw new IOException("No valid revisions in bundle archive directory: " + bundleDir);
+		}
+		this.bundleDir = bundleDir;
+		long longValue = ((Long) this.revisions.lastKey()).longValue();
+		BundleArchiveRevision bundleArchiveRevision = new BundleArchiveRevision(location, longValue, new File(bundleDir, "version." + String.valueOf(longValue)));
+		this.revisions.put(Long.valueOf(longValue), bundleArchiveRevision);
+		this.currentRevision = bundleArchiveRevision;
+	}
 
-    public BundleArchive(String location, File bundleDir, File archiveFile) throws IOException {
-        this.revisions = new TreeMap<Long, BundleArchiveRevision>();
-        this.bundleDir = bundleDir;
-        BundleArchiveRevision bundleArchiveRevision = new BundleArchiveRevision(
-                location, 1, new File(bundleDir, "version." + String.valueOf(1)), archiveFile);
-        this.revisions.put(Long.valueOf(1), bundleArchiveRevision);
-        this.currentRevision = bundleArchiveRevision;
-    }
 
-    @Override
+	public BundleArchive(String location, File bundleDir, InputStream inputStream)
+			throws IOException {
+		this.revisions = new TreeMap<Long, BundleArchiveRevision>();
+		this.bundleDir = bundleDir;
+		BundleArchiveRevision bundleArchiveRevision = new BundleArchiveRevision(
+				location, 1, new File(bundleDir, "version." + String.valueOf(1)),
+				inputStream);
+		this.revisions.put(Long.valueOf(1), bundleArchiveRevision);
+		this.currentRevision = bundleArchiveRevision;
+	}
+
+	public BundleArchive(String location, File bundleDir, File archiveFile) throws IOException {
+		this.revisions = new TreeMap<Long, BundleArchiveRevision>();
+		this.bundleDir = bundleDir;
+		BundleArchiveRevision bundleArchiveRevision = new BundleArchiveRevision(
+				location, 1, new File(bundleDir, "version." + String.valueOf(1)), archiveFile);
+		this.revisions.put(Long.valueOf(1), bundleArchiveRevision);
+		this.currentRevision = bundleArchiveRevision;
+	}
+
+	@Override
 	public BundleArchiveRevision newRevision(String location, File bundleDir,
-            InputStream inputStream) throws IOException {
-        long longValue = 1 + this.revisions.lastKey().longValue();
-        BundleArchiveRevision bundleArchiveRevision = new BundleArchiveRevision(
-                location, longValue, new File(bundleDir, "version."
-                        + String.valueOf(longValue)), inputStream);
-        this.revisions.put(Long.valueOf(longValue), bundleArchiveRevision);
-        return bundleArchiveRevision;
-    }
+			InputStream inputStream) throws IOException {
+		long longValue = 1 + this.revisions.lastKey().longValue();
+		BundleArchiveRevision bundleArchiveRevision = new BundleArchiveRevision(
+				location, longValue, new File(bundleDir, "version."
+						+ String.valueOf(longValue)), inputStream);
+		this.revisions.put(Long.valueOf(longValue), bundleArchiveRevision);
+		return bundleArchiveRevision;
+	}
 
-    @Override
+	@Override
 	public BundleArchiveRevision newRevision(String packageName, File bundleDir, File archiveFile)
-            throws IOException {
-        long revision = 1 + this.revisions.lastKey().longValue();
-        BundleArchiveRevision bundleArchiveRevision = new BundleArchiveRevision(
-                packageName, revision, new File(bundleDir, "version."
-                        + String.valueOf(revision)), archiveFile);
-        this.revisions.put(Long.valueOf(revision), bundleArchiveRevision);
-        return bundleArchiveRevision;
-    }
+			throws IOException {
+		long revision = 1 + this.revisions.lastKey().longValue();
+		BundleArchiveRevision bundleArchiveRevision = new BundleArchiveRevision(
+				packageName, revision, new File(bundleDir, "version."
+						+ String.valueOf(revision)), archiveFile);
+		this.revisions.put(Long.valueOf(revision), bundleArchiveRevision);
+		return bundleArchiveRevision;
+	}
 
-    @Override
+	@Override
 	public BundleArchiveRevision getCurrentRevision() {
-        return this.currentRevision;
-    }
+		return this.currentRevision;
+	}
 
-    @Override
+	@Override
 	public File getArchiveFile() {
-        return this.currentRevision.getRevisionFile();
-    }
+		return this.currentRevision.getRevisionFile();
+	}
 
-    public File getBundleDir() {
-        return this.bundleDir;
-    }
+	public File getBundleDir() {
+		return this.bundleDir;
+	}
 
-    @Override
+	@Override
 	public boolean isDexOpted() {
-        return this.currentRevision.isDexOpted();
-    }
+		return this.currentRevision.isDexOpted();
+	}
 
-    @Override
+	@Override
 	public void optDexFile() {
-        this.currentRevision.optDexFile();
-    }
+		this.currentRevision.optDexFile();
+	}
 
-    @Override
+	@Override
 	public InputStream openAssetInputStream(String name) throws IOException {
-        return this.currentRevision.openAssetInputStream(name);
-    }
+		return this.currentRevision.openAssetInputStream(name);
+	}
 
-    @Override
+	@Override
 	public InputStream openNonAssetInputStream(String name) throws IOException {
-        return this.currentRevision.openNonAssetInputStream(name);
-    }
+		return this.currentRevision.openNonAssetInputStream(name);
+	}
 
-    @Override
+	@Override
 	public Manifest getManifest() throws IOException {
-        return this.currentRevision.getManifest();
-    }
+		return this.currentRevision.getManifest();
+	}
 
-    @Override
+	@Override
 	public Class<?> findClass(String clazz, ClassLoader classLoader)
-            throws ClassNotFoundException {
-        return this.currentRevision.findClass(clazz, classLoader);
-    }
+			throws ClassNotFoundException {
+		return this.currentRevision.findClass(clazz, classLoader);
+	}
 
-    @Override
+	@Override
 	public File findLibrary(String name) {
-        return this.currentRevision.findSoLibrary(name);
-    }
+		return this.currentRevision.findSoLibrary(name);
+	}
 
-    @Override
+	@Override
 	public List<URL> getResources(String name) throws IOException {
-        return this.currentRevision.getResources(name);
-    }
+		return this.currentRevision.getResources(name);
+	}
 
-    @Override
+	@Override
 	public void purge() throws Exception {
-        if (this.revisions.size() > 1) {
-            long revisionNum = this.currentRevision.getRevisionNum();
-            for (Long longValue : this.revisions.keySet()) {
-                long longValue2 = longValue.longValue();
-                if (longValue2 != revisionNum) {
-                    File file = new File(this.bundleDir, "version."
-                            + String.valueOf(longValue2));
-                    if (file.exists()) {
-                        Framework.deleteDirectory(file);
-                    }
-                }
-            }
-            this.revisions.clear();
-            this.revisions.put(Long.valueOf(revisionNum), this.currentRevision);
-        }
-    }
+		if (this.revisions.size() > 1) {
+			long revisionNum = this.currentRevision.getRevisionNum();
+			for (Long longValue : this.revisions.keySet()) {
+				long longValue2 = longValue.longValue();
+				if (longValue2 != revisionNum) {
+					File file = new File(this.bundleDir, "version."
+							+ String.valueOf(longValue2));
+					if (file.exists()) {
+						Framework.deleteDirectory(file);
+					}
+				}
+			}
+			this.revisions.clear();
+			this.revisions.put(Long.valueOf(revisionNum), this.currentRevision);
+		}
+	}
 
-    @Override
+	public static boolean downgradeRevision(File file) throws IOException {
+
+		File[] listFiles = file.listFiles(new FilenameFilter() {
+
+			@Override
+			public boolean accept(File dir, String filename) {   
+				if (!filename.startsWith(BundleArchive.REVISION_DIRECTORY) ||
+						new File(dir, BundleArchive.DEPRECATED_MARK).exists()) {
+					return false;
+				}
+				return true;}
+
+		});
+		if (listFiles == null || listFiles.length <= 0) {
+			return false;
+		}
+		new File(listFiles[listFiles.length - 1], DEPRECATED_MARK).createNewFile();
+
+		return true;
+	}
+
+	@Override
 	public void close() {
-    }
+	}
 }

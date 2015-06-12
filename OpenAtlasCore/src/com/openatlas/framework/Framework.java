@@ -20,14 +20,17 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
  * **/
 package com.openatlas.framework;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.AccessController;
 import java.util.ArrayList;
@@ -65,6 +68,7 @@ import org.osgi.service.startlevel.StartLevel;
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Build.VERSION;
+import android.os.Process;
 
 import com.openatlas.boot.PlatformConfigure;
 import com.openatlas.framework.bundlestorage.BundleArchive;
@@ -75,7 +79,6 @@ import com.openatlas.runtime.RuntimeVariables;
 import com.openatlas.util.BundleLock;
 import com.openatlas.util.OpenAtlasFileLock;
 import com.openatlas.util.StringUtils;
-import com.openatlas.util.Utils;
 
 public final class Framework {
 	private static final AdminPermission ADMIN_PERMISSION;
@@ -595,6 +598,22 @@ public final class Framework {
 
 		return ((BundleImpl) mBundle);
 	}
+	
+    static boolean restoreBundle(String[] packageNames) {
+     
+        try {
+            for (String pkgName : packageNames) {
+                File archiveFile = new File(STORAGE_LOCATION, pkgName);
+                if (!archiveFile.exists() || !BundleArchive.downgradeRevision(archiveFile)) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
 	static BundleImpl installNewBundle(String location, InputStream archiveInputStream) throws BundleException {
 		Bundle mBundle = null;
@@ -650,7 +669,8 @@ public final class Framework {
 		int property;
 		frameworkStartupShutdown = true;
 		System.out.println("---------------------------------------------------------");
-		System.out.println("  OpenAtlas OSGi 0.9.0 on " + Build.MODEL + "/" + Build.CPU_ABI + "/" + VERSION.RELEASE + " starting ...");
+		System.out.println("  OpenAtlas OSGi 1.0.0  Pre-Release on " + Build.MODEL + "/" + Build.CPU_ABI + "/"
+				+ VERSION.RELEASE + " starting ...");
 		System.out.println("---------------------------------------------------------");
 		long currentTimeMillis = System.currentTimeMillis();
 		initialize();
@@ -1098,7 +1118,7 @@ public final class Framework {
     private static void MergeWirteAheads(File file) {
         try {
             File file2 = new File(STORAGE_LOCATION, "wal");
-            String curProcessName =Utils.getProcessName();
+            String curProcessName =Framework.getCurrentProcessName();
             log.debug("restoreProfile in process " + curProcessName);
             String packageName = RuntimeVariables.androidApplication.getPackageName();
             if (curProcessName != null && packageName != null && curProcessName.equals(packageName)) {
@@ -1269,4 +1289,47 @@ public final class Framework {
 	public static void setClassNotFoundCallback(ClassNotFoundInterceptorCallback classNotFoundInterceptorCallback) {
 		classNotFoundCallback = classNotFoundInterceptorCallback;
 	}
+    public static String getCurrentProcessName() {
+
+		InputStreamReader reader = null;
+		BufferedReader br=null;
+		try {
+			reader = new InputStreamReader(new FileInputStream("/proc/"+Process.myPid()+"/cmdline"));
+			br = new BufferedReader(reader);
+			char[] data=new char[64];//定义数组  进程名字最长64
+			br.read(data);
+			int len=0;
+			for (char c : data) {
+				if (c==0) {
+					break;
+				}
+				len++;
+			}
+			return  new String(data,0,len);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			if (reader!=null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (br!=null){
+				try{
+					br.close();
+				}catch (IOException e){}
+			}
+
+		}
+		return "";
+
+
+
+	
+    }
 }

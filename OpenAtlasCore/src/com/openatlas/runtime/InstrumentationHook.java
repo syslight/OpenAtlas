@@ -49,7 +49,9 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.openatlas.boot.PlatformConfigure;
+import com.openatlas.bundleInfo.BundleInfoList;
 import com.openatlas.framework.BundleClassLoader;
+import com.openatlas.framework.BundleImpl;
 import com.openatlas.framework.Framework;
 import com.openatlas.hack.Hack;
 import com.openatlas.hack.Hack.HackDeclaration.HackAssertionException;
@@ -58,6 +60,7 @@ import com.openatlas.hack.Hack.HackedMethod;
 import com.openatlas.hack.OpenAtlasHacks;
 import com.openatlas.log.Logger;
 import com.openatlas.log.LoggerFactory;
+import com.openatlas.log.OpenAtlasMonitor;
 import com.openatlas.util.StringUtils;
 
 public class InstrumentationHook extends Instrumentation {
@@ -297,19 +300,22 @@ public class InstrumentationHook extends Instrumentation {
 		}
 	}
 
-    private void HandleResourceNotFound(Activity activity, Bundle bundle, Exception exception) {
-        if (OpenAtlasHacks.ContextThemeWrapper_mResources != null) {
-            String str;
-            try {
-                List<?> assetPathFromResources = getAssetPathFromResources(OpenAtlasHacks.ContextThemeWrapper_mResources.get(activity));
-                str = "(1)Paths in ContextThemeWrapper_mResources:" + assetPathFromResources + " paths in runtime:" + DelegateResources.getAssetHistoryPaths();
-            } catch (Exception e) {
-                str = "(2)paths in runtime:" + DelegateResources.getAssetHistoryPaths() + " getAssetPath fail: " + e;
-            }
-            throw new RuntimeException(str, exception);
-        }
-        throw new RuntimeException("(3)ContextThemeWrapper_mResources is null paths in runtime:" + DelegateResources.getAssetHistoryPaths(), exception);
-    }
+	private void HandleResourceNotFound(Activity activity, Bundle bundle, Exception exception) {
+		if (OpenAtlasHacks.ContextThemeWrapper_mResources != null) {
+			String str;
+			try {
+				List<?> assetPathFromResources = getAssetPathFromResources(OpenAtlasHacks.ContextThemeWrapper_mResources
+						.get(activity));
+				str = "(1)Paths in ContextThemeWrapper_mResources:" + assetPathFromResources + " paths in runtime:"
+						+ DelegateResources.getAssetHistoryPaths();
+			} catch (Exception e) {
+				str = "(2)paths in runtime:" + DelegateResources.getAssetHistoryPaths() + " getAssetPath fail: " + e;
+			}
+			throw new RuntimeException(str, exception);
+		}
+		throw new RuntimeException("(3)ContextThemeWrapper_mResources is null paths in runtime:"
+				+ DelegateResources.getAssetHistoryPaths(), exception);
+	}
 	public ActivityResult execStartActivity(Context who, IBinder contextThread, IBinder token, Activity target,
 			Intent intent, int requestCode) {
 		return execStartActivityInternal(this.context, intent, new ExecStartActivityCallbackImpl(who, contextThread, token, target,
@@ -349,8 +355,6 @@ public class InstrumentationHook extends Instrumentation {
 		} else {
 			ResolveInfo resolveActivity = context.getPackageManager().resolveActivity(intent, 0);
 			if (resolveActivity == null || resolveActivity.activityInfo == null) {
-				Object obj = activityResult;
-				Object obj2 = activityResult;
 			} else {
 				packageName = resolveActivity.activityInfo.packageName;
 				className = resolveActivity.activityInfo.name;
@@ -377,7 +381,9 @@ public class InstrumentationHook extends Instrumentation {
 					return execStartActivityCallback.execStartActivity();
 				}
 				return activityResult;
-			} catch (ClassNotFoundException e2) {
+			} catch (ClassNotFoundException e) {
+				OpenAtlasMonitor.getInstance().trace(OpenAtlasMonitor.BUNDLE_INSTALL_FAIL, className, "",
+						"Failed to load bundle even in system classloader", e);
 				log.error("Can't find class " + className);
 				fallBackToClassNotFoundCallback(context, intent, className);
 				return activityResult;
@@ -484,14 +490,16 @@ public class InstrumentationHook extends Instrumentation {
 		}
 		return newActivity;
 	}
-    private List<String> getAssetPathFromResources(Resources resources) {
-        try {
-            return DelegateResources.getOriginAssetsPath((AssetManager) OpenAtlasHacks.Resources_mAssets.get(resources));
-        } catch (Exception e) {
-            log.debug("DelegateResource" + e.getCause());
-            return null;
-        }
-    }
+
+	private List<String> getAssetPathFromResources(Resources resources) {
+		try {
+			return DelegateResources
+					.getOriginAssetsPath((AssetManager) OpenAtlasHacks.Resources_mAssets.get(resources));
+		} catch (Exception e) {
+			log.debug("DelegateResource" + e.getCause());
+			return null;
+		}
+	}
 	/**
 	 * Perform calling of an activity's {@link Activity#onCreate}
 	 * method.  The default implementation simply calls through to that method.
@@ -520,17 +528,18 @@ public class InstrumentationHook extends Instrumentation {
 			if (TextUtils.isEmpty(property)) {
 				property = PlatformConfigure.BOOT_ACTIVITY;
 			}
-		      try {
-	                ensureResourcesInjected(activity);
-	                this.mBase.callActivityOnCreate(activity, icicle);
-	                return;
-	            } catch (Exception e2) {
-	                if (!e2.toString().contains("android.content.res.Resources") || e2.toString().contains("OutOfMemoryError")) {
-	                	e2.printStackTrace();
-	                }
-	                HandleResourceNotFound(activity, icicle, e2);
-	                return;
-	            }
+			try {
+				ensureResourcesInjected(activity);
+				this.mBase.callActivityOnCreate(activity, icicle);
+				return;
+			} catch (Exception e2) {
+				if (!e2.toString().contains("android.content.res.Resources")
+						|| e2.toString().contains("OutOfMemoryError")) {
+					e2.printStackTrace();
+				}
+				HandleResourceNotFound(activity, icicle, e2);
+				return;
+			}
 		}
 		this.mBase.callActivityOnCreate(activity, icicle);
 	}
@@ -585,16 +594,70 @@ public class InstrumentationHook extends Instrumentation {
 	public void endPerformanceSnapshot() {
 		this.mBase.endPerformanceSnapshot();
 	}
-    private void ensureResourcesInjected(Activity activity) {
-        ContextImplHook contextImplHook = new ContextImplHook(activity.getBaseContext(), activity.getClass().getClassLoader());
-        if (OpenAtlasHacks.ContextThemeWrapper_mResources != null) {
-        	OpenAtlasHacks.ContextThemeWrapper_mResources.set(activity, RuntimeVariables.getDelegateResources());
-        }
-        if (!(OpenAtlasHacks.ContextThemeWrapper_mBase == null || OpenAtlasHacks.ContextThemeWrapper_mBase.getField() == null)) {
-        	OpenAtlasHacks.ContextThemeWrapper_mBase.set(activity, contextImplHook);
-        }
-        OpenAtlasHacks.ContextWrapper_mBase.set(activity, contextImplHook);
-    }
+
+	private void ensureResourcesInjected(Activity activity) {
+		ContextImplHook contextImplHook = new ContextImplHook(activity.getBaseContext(), activity.getClass()
+				.getClassLoader());
+		if (OpenAtlasHacks.ContextThemeWrapper_mResources != null) {
+			try {
+				validateActivityResource(activity);
+			} catch (Throwable th) {
+			}
+			OpenAtlasHacks.ContextThemeWrapper_mResources.set(activity, RuntimeVariables.getDelegateResources());
+		}
+		if (!(OpenAtlasHacks.ContextThemeWrapper_mBase == null || OpenAtlasHacks.ContextThemeWrapper_mBase.getField() == null)) {
+			OpenAtlasHacks.ContextThemeWrapper_mBase.set(activity, contextImplHook);
+		}
+		OpenAtlasHacks.ContextWrapper_mBase.set(activity, contextImplHook);
+	}
+
+	private boolean validateActivityResource(Activity activity) {
+		String absolutePath;
+		Resources resources;
+
+		String logInfo = null;
+		BundleImpl bundleImpl = (BundleImpl) Framework.getBundle(BundleInfoList.getInstance().getBundleNameForComponet(
+				activity.getLocalClassName()));
+		if (bundleImpl != null) {
+			absolutePath = bundleImpl.getArchive().getArchiveFile().getAbsolutePath();
+		} else {
+			absolutePath = null;
+		}
+		if (OpenAtlasHacks.ContextThemeWrapper_mResources != null) {
+			resources = OpenAtlasHacks.ContextThemeWrapper_mResources.get(activity);
+		} else {
+			resources = activity.getResources();
+		}
+		Resources delegateResource = RuntimeVariables.getDelegateResources();
+		if (resources == delegateResource) {
+			return true;
+		}
+		List<?> assetPathFromResources = getAssetPathFromResources(resources);
+		String assetHistoryPaths = DelegateResources.getAssetHistoryPaths();
+		List<?> assetPathFromDelegateResources = getAssetPathFromResources(delegateResource);
+		if (!(absolutePath == null || assetPathFromResources == null || assetPathFromResources.contains(absolutePath))) {
+			logInfo = "Activity Resources path not contains:"
+					+ bundleImpl.getArchive().getArchiveFile().getAbsolutePath();
+			if (!assetHistoryPaths.contains(absolutePath)) {
+				logInfo = logInfo + "paths in history not contains:"
+						+ bundleImpl.getArchive().getArchiveFile().getAbsolutePath();
+			}
+			if (!assetPathFromDelegateResources.contains(absolutePath)) {
+				logInfo = logInfo + "paths in runtime not contains:"
+						+ bundleImpl.getArchive().getArchiveFile().getAbsolutePath();
+			}
+			if (!bundleImpl.getArchive().getArchiveFile().exists()) {
+				logInfo = logInfo + "  Bundle archive file not exist:"
+						+ bundleImpl.getArchive().getArchiveFile().getAbsolutePath();
+			}
+			logInfo = logInfo + " Activity Resources paths length:" + assetPathFromResources.size();
+		}
+		if (logInfo == null) {
+			return true;
+		}
+		OpenAtlasMonitor.getInstance().trace(Integer.valueOf(-4), "", "", logInfo);
+		return false;
+	}
 	@Override
 	public void onDestroy() {
 		this.mBase.onDestroy();

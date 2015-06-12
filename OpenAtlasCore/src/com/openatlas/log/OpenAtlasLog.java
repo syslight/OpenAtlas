@@ -29,7 +29,7 @@ package com.openatlas.log;
 
 import android.util.Log;
 
-public class AtlasLog {
+public class OpenAtlasLog {
     private static ILog externalLogger;
 
     public static void setExternalLogger(ILog iLog) {

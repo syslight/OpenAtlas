@@ -36,6 +36,7 @@ import android.app.Application;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
@@ -48,6 +49,7 @@ import com.openatlas.hack.AndroidHack;
 import com.openatlas.hack.OpenAtlasHacks;
 import com.openatlas.log.Logger;
 import com.openatlas.log.LoggerFactory;
+import com.openatlas.log.OpenAtlasMonitor;
 
 
 public class DelegateResources extends Resources {
@@ -55,6 +57,8 @@ public class DelegateResources extends Resources {
 	private static Set<String> assetPathsHistory;
 	private static Object lock;
 	static final Logger log;
+	private static boolean ignoreOpt;
+	private static final String[]   ignoreOptBrands = new String[]{"Sony", "SEMC"};;
 	private static List<String> mOriginAssetsPath;
 	private Map<String, Integer> resIdentifierMap;
 
@@ -92,6 +96,13 @@ public class DelegateResources extends Resources {
 	static {
 		log = LoggerFactory.getInstance("DelegateResources");
 		lock = new Object();
+		for (String mBrand : ignoreOptBrands) {
+			if(Build.BRAND.equalsIgnoreCase(mBrand)){
+				ignoreOpt = true;
+				break;
+			}
+		}
+
 		mOriginAssetsPath = null;
 	}
 
@@ -114,38 +125,63 @@ public class DelegateResources extends Resources {
 	 * @param newPath 新插件的路径
 	 * ******/
 	private static void newDelegateResourcesInternal(Application application, Resources resources, String newPath) throws Exception {
-		Set<String> generateNewAssetPaths = generateNewAssetPaths(application, newPath);
-		if (generateNewAssetPaths != null) {
-			Resources delegateResources;
-			AssetManager assetManager = AssetManager.class.newInstance();
-			for (String assetPath : generateNewAssetPaths) {
-				OpenAtlasHacks.AssetManager_addAssetPath.invoke(assetManager, assetPath);
-			}
-			if (resources == null || !resources.getClass().getName().equals("android.content.res.MiuiResources")) {//如果是翔米UI需要使用MiuiResources
-				delegateResources = new DelegateResources(assetManager, resources);
-			} else {
-				Constructor<?> declaredConstructor = Class.forName("android.content.res.MiuiResources").getDeclaredConstructor(new Class[]{AssetManager.class, DisplayMetrics.class, Configuration.class});
-				declaredConstructor.setAccessible(true);
-				delegateResources = (Resources) declaredConstructor.newInstance(new Object[]{assetManager, resources.getDisplayMetrics(), resources.getConfiguration()});
-			}
-			RuntimeVariables.setDelegateResources(delegateResources);
-			AndroidHack.injectResources(application, delegateResources);
-			assetPathsHistory = generateNewAssetPaths;
-			if (log.isDebugEnabled()) {
-				StringBuffer stringBuffer = new StringBuffer();
-				stringBuffer.append("newDelegateResources [");
-				for (String append : generateNewAssetPaths) {
-					stringBuffer.append(append).append(",");
+		AssetManager assetManager;
+		if (ignoreOpt || VERSION.SDK_INT <= 20 || assetPathsHistory == null) {
+			Set<String> generateNewAssetPaths = generateNewAssetPaths(application, newPath);
+			if (generateNewAssetPaths != null) {
+				Resources delegateResources;
+				assetManager = (AssetManager) AssetManager.class.newInstance();
+				for (String assetPath : generateNewAssetPaths) {
+					try {
+						if (Integer.parseInt(OpenAtlasHacks.AssetManager_addAssetPath.invoke(assetManager, assetPath).toString()) == 0) {
+							for (int i = 0; i < 3; i++) {
+								if (Integer.parseInt(OpenAtlasHacks.AssetManager_addAssetPath.invoke(assetManager, assetPath).toString()) != 0) {
+									break;
+								}
+								if (i == 3) {
+									OpenAtlasMonitor.getInstance().trace(Integer.valueOf(-1),   assetPath,"", "Add asset path failed");
+								}
+								
+							}
+					
+						}
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+					}
 				}
-				stringBuffer.append("]");
-				if (newPath != null) {
-					stringBuffer.append("Add new path:" + newPath);
+				if (resources == null || !resources.getClass().getName().equals("android.content.res.MiuiResources")) {//如果是翔米UI需要使用MiuiResources
+					delegateResources = new DelegateResources(assetManager, resources);
+				} else {
+					Constructor<?> declaredConstructor = Class.forName("android.content.res.MiuiResources").getDeclaredConstructor(new Class[]{AssetManager.class, DisplayMetrics.class, Configuration.class});
+					declaredConstructor.setAccessible(true);
+					delegateResources = (Resources) declaredConstructor.newInstance(new Object[]{assetManager, resources.getDisplayMetrics(), resources.getConfiguration()});
 				}
-				log.debug(stringBuffer.toString());
+				RuntimeVariables.setDelegateResources(delegateResources);
+				AndroidHack.injectResources(application, delegateResources);
+				assetPathsHistory = generateNewAssetPaths;
+				if (log.isDebugEnabled()) {
+					StringBuffer stringBuffer = new StringBuffer();
+					stringBuffer.append("newDelegateResources [");
+					for (String append : generateNewAssetPaths) {
+						stringBuffer.append(append).append(",");
+					}
+					stringBuffer.append("]");
+					if (newPath != null) {
+						stringBuffer.append("Add new path:" + newPath);
+					}
+					log.debug(stringBuffer.toString());
+					return;
+				}
+				return;
 			}
+			return;
+		}
+		assetManager = application.getAssets();
+		if (!TextUtils.isEmpty(newPath) && !assetPathsHistory.contains(newPath)) {
+			OpenAtlasHacks.AssetManager_addAssetPath.invoke(assetManager, newPath);
+			assetPathsHistory.add(newPath);
 		}
 	}
-
 	public static List<String> getOriginAssetsPath(AssetManager assetManager) {
 		List<String> arrayList = new ArrayList<String>();
 		try {
@@ -180,51 +216,35 @@ public class DelegateResources extends Resources {
 		return stringBuffer.toString();
 	}
 	/**重新生成Asset列表**/
-	private static Set<String> generateNewAssetPaths(Application application, String newPath) {
-		if (newPath != null && assetPathsHistory != null && assetPathsHistory.contains(newPath)) {
-			return null;
-		}
-		Set<String> linkedHashSet = new LinkedHashSet<String>();
-		linkedHashSet.add(application.getApplicationInfo().sourceDir);
-		if (VERSION.SDK_INT > 20) {
-			try {
-				if (mOriginAssetsPath == null || mOriginAssetsPath.indexOf(WebViewGoogleAssetPath) == -1) {
-					mOriginAssetsPath = getOriginAssetsPath(application.getResources().getAssets());
-				}
-				if (!(mOriginAssetsPath == null || mOriginAssetsPath.indexOf(WebViewGoogleAssetPath) == -1)) {
-					linkedHashSet.add(WebViewGoogleAssetPath);
-				}
-				if (assetPathsHistory != null) {
-					linkedHashSet.addAll(assetPathsHistory);
-				}
-				if (newPath == null) {
-					return linkedHashSet;
-				}
-				linkedHashSet.add(newPath);
-				return linkedHashSet;
-			} catch (Throwable th) {
+	
+    private static Set<String> generateNewAssetPaths(Application application, String newPath) {
 
-				if (assetPathsHistory != null) {
-					linkedHashSet.addAll(assetPathsHistory);
-				}
-				if (newPath != null) {
-					return linkedHashSet;
-				}
-				linkedHashSet.add(newPath);
-				return linkedHashSet;
-			}
-		}
-		if (assetPathsHistory != null) {
-			linkedHashSet.addAll(assetPathsHistory);
-		}
-		if (newPath == null) {
-			return linkedHashSet;
-		}
-		linkedHashSet.add(newPath);
-		return linkedHashSet;
-	}
-
-	@Override
+        if (newPath != null && assetPathsHistory != null && assetPathsHistory.contains(newPath)) {
+            return null;
+        }
+        Set<String> mGenerateNewSet = new LinkedHashSet<String>();
+        mGenerateNewSet.add(application.getApplicationInfo().sourceDir);
+        if (ignoreOpt && VERSION.SDK_INT > 20) {
+            mGenerateNewSet.add(WebViewGoogleAssetPath);
+        }
+        try {
+            if (mOriginAssetsPath == null && VERSION.SDK_INT > 20 && !ignoreOpt) {
+                mOriginAssetsPath = getOriginAssetsPath(application.getResources().getAssets());
+                mGenerateNewSet.addAll(mOriginAssetsPath);
+            }
+        } catch (Throwable th) {
+            log.error("get original asset path exception:", th);
+            OpenAtlasMonitor.getInstance().trace(Integer.valueOf(-4),   newPath, "", "get original asset path exception:", th);
+        }
+        if (assetPathsHistory != null) {
+            mGenerateNewSet.addAll(assetPathsHistory);
+        }
+        if (newPath != null) {
+            mGenerateNewSet.add(newPath);
+        }
+        return mGenerateNewSet;
+    }
+@Override
 	public int getIdentifier(String str, String str2, String str3) {
 		int identifier = super.getIdentifier(str, str2, str3);
 		if (identifier != 0) {
