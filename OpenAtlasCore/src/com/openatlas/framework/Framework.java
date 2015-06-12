@@ -77,6 +77,7 @@ import com.openatlas.log.LoggerFactory;
 import com.openatlas.runtime.ClassNotFoundInterceptorCallback;
 import com.openatlas.runtime.RuntimeVariables;
 import com.openatlas.util.BundleLock;
+import com.openatlas.util.FileUtils;
 import com.openatlas.util.OpenAtlasFileLock;
 import com.openatlas.util.StringUtils;
 
@@ -89,7 +90,8 @@ public final class Framework {
 	static boolean DEBUG_CLASSLOADING = true;
 	static boolean DEBUG_PACKAGES = true;
 	static boolean DEBUG_SERVICES = true;
-	static final String FRAMEWORK_VERSION = "0.9.0";
+	static final String FRAMEWORK_VERSION = "1.0.0";
+	private static final String DOWN_GRADE_FILE = "down_grade_list";
 	static int LOG_LEVEL;
 	static String STORAGE_LOCATION;
 	@SuppressWarnings("unused")
@@ -598,22 +600,21 @@ public final class Framework {
 
 		return ((BundleImpl) mBundle);
 	}
-	
-    static boolean restoreBundle(String[] packageNames) {
-     
-        try {
-            for (String pkgName : packageNames) {
-                File archiveFile = new File(STORAGE_LOCATION, pkgName);
-                if (!archiveFile.exists() || !BundleArchive.downgradeRevision(archiveFile)) {
-                    return false;
-                }
-            }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
+	static boolean restoreBundle(String[] packageNames) {
+
+		try {
+			for (String pkgName : packageNames) {
+				File archiveFile = new File(STORAGE_LOCATION, pkgName);
+				if (!archiveFile.exists() || !BundleArchive.downgradeRevision(archiveFile)) {
+					return false;
+				}
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 	static BundleImpl installNewBundle(String location, InputStream archiveInputStream) throws BundleException {
 		Bundle mBundle = null;
@@ -943,7 +944,7 @@ public final class Framework {
 				}
 				File file2 = new File(STORAGE_LOCATION);
 				mergeWalsDir(new File(STORAGE_LOCATION, "wal"), file2);
-				 MergeWirteAheads(file2);
+				MergeWirteAheads(file2);
 				File[] listFiles = file2.listFiles(new FilenameFilter() {
 					@Override
 					public boolean accept(File file, String str) {
@@ -1102,7 +1103,7 @@ public final class Framework {
 				for (BundleListener bundleListener : bundleListenerArr) {
 					bundleListener.bundleChanged(bundleEvent);
 				}
-		
+
 			}
 		}
 	}
@@ -1115,23 +1116,55 @@ public final class Framework {
 		frameworkListeners.remove(frameworkListener);
 	}
 
-    private static void MergeWirteAheads(File file) {
-        try {
-            File file2 = new File(STORAGE_LOCATION, "wal");
-            String curProcessName =Framework.getCurrentProcessName();
-            log.debug("restoreProfile in process " + curProcessName);
-            String packageName = RuntimeVariables.androidApplication.getPackageName();
-            if (curProcessName != null && packageName != null && curProcessName.equals(packageName)) {
-                mergeWalsDir(file2, file);
-            }
-        } catch (Throwable th) {
-            if (Build.MODEL == null || !Build.MODEL.equals("HTC 802w")) {
-                log.error(th.getMessage(), th.getCause());
-                return;
-            }
-            RuntimeException runtimeException = new RuntimeException(th);
-        }
-    }
+	private static void restoreBundles() throws IOException {
+		File file = new File(STORAGE_LOCATION, DOWN_GRADE_FILE);
+		for (String pkg : FileUtils.getStrings(file)) {
+
+			File locationFolder = new File(STORAGE_LOCATION, pkg);
+			if (locationFolder.exists()) {
+				String[] list = locationFolder.list();
+				String version = null;
+				if (list != null) {
+					for (String string : list) {
+						if (string.startsWith("version")
+								|| Long.parseLong(StringUtils.substringAfter(string, ".")) <= 0) {
+							version = string;
+						}
+					}
+
+				}
+				if (version == null) {
+					FileUtils.deleteFile(locationFolder.getAbsolutePath());
+				} else {
+					File tmp = new File(locationFolder, version);
+					if (tmp.exists()) {
+						FileUtils.deleteFile(tmp.getAbsolutePath());
+					}
+				}
+			}
+		}
+		if (file.exists()) {
+			FileUtils.deleteFile(file.getAbsolutePath());
+		}
+	}
+
+	private static void MergeWirteAheads(File file) {
+		try {
+			File file2 = new File(STORAGE_LOCATION, "wal");
+			String curProcessName = Framework.getCurrentProcessName();
+			log.debug("restoreProfile in process " + curProcessName);
+			String packageName = RuntimeVariables.androidApplication.getPackageName();
+			if (curProcessName != null && packageName != null && curProcessName.equals(packageName)) {
+				mergeWalsDir(file2, file);
+			}
+		} catch (Throwable th) {
+			if (Build.MODEL == null || !Build.MODEL.equals("HTC 802w")) {
+				log.error(th.getMessage(), th.getCause());
+				return;
+			}
+			RuntimeException runtimeException = new RuntimeException(th);
+		}
+	}
 	static void addBundleListener(BundleListener bundleListener) {
 		bundleListeners.add(bundleListener);
 	}
@@ -1164,7 +1197,7 @@ public final class Framework {
 	}
 
 	static void clearBundleTrace(BundleImpl bundleImpl) {
-		
+
 		if (bundleImpl.registeredFrameworkListeners != null) {
 			frameworkListeners.removeAll(bundleImpl.registeredFrameworkListeners);
 			bundleImpl.registeredFrameworkListeners = null;
@@ -1184,7 +1217,7 @@ public final class Framework {
 				unregisterService(serviceReference);
 				((ServiceReferenceImpl) serviceReference).invalidate();
 			}
-		
+
 			bundleImpl.registeredServices = null;
 		}
 		ServiceReference[] servicesInUse = bundleImpl.getServicesInUse();
@@ -1289,7 +1322,8 @@ public final class Framework {
 	public static void setClassNotFoundCallback(ClassNotFoundInterceptorCallback classNotFoundInterceptorCallback) {
 		classNotFoundCallback = classNotFoundInterceptorCallback;
 	}
-    public static String getCurrentProcessName() {
+
+	public static String getCurrentProcessName() {
 
 		InputStreamReader reader = null;
 		BufferedReader br=null;
@@ -1330,6 +1364,5 @@ public final class Framework {
 
 
 
-	
-    }
+	}
 }
