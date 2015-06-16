@@ -192,7 +192,11 @@ public class FileUtils {
 
 		try {
 			FileInputStream fileInputStream = new FileInputStream(filePath);
+			fileInputStream.close();
 		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return false;
 	}
