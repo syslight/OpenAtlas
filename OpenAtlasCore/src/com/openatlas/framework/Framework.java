@@ -82,7 +82,7 @@ import com.openatlas.util.OpenAtlasFileLock;
 import com.openatlas.util.StringUtils;
 
 public final class Framework {
-	private static final AdminPermission ADMIN_PERMISSION;
+	private static final AdminPermission ADMIN_PERMISSION = new AdminPermission();;
 	private static String BASEDIR = null;
 	private static String BUNDLE_LOCATION = null;
 	static int CLASSLOADER_BUFFER_SIZE = 0;
@@ -96,26 +96,27 @@ public final class Framework {
 	static String STORAGE_LOCATION;
 	@SuppressWarnings("unused")
 	private static boolean STRICT_STARTUP;
-	static List<BundleListener> bundleListeners;
-	static Map<String, Bundle> bundles;
+	static List<BundleListener> bundleListeners= new ArrayList<BundleListener>();;
+	static Map<String, Bundle> bundles = new ConcurrentHashMap<String, Bundle>();
 	private static ClassNotFoundInterceptorCallback classNotFoundCallback;
-	static Map<String, List<ServiceReference>> classes_services;
-	static Map<Package, Package> exportedPackages;
-	static List<FrameworkListener> frameworkListeners;
-	static boolean frameworkStartupShutdown;
-	static int initStartlevel;
-	static final Logger log;
-	static boolean mIsEnableBundleInstallWhenFindClass;
-	static Map<String, String> mMapForComAndBundles;
+	static Map<String, List<ServiceReference>> classes_services = new HashMap<String, List<ServiceReference>>();
+	static Map<Package, Package> exportedPackages = new ConcurrentHashMap<Package, Package>();
+	static List<FrameworkListener> frameworkListeners = new ArrayList<FrameworkListener>();
+	static boolean frameworkStartupShutdown = false;
+	static int initStartlevel = 1;
+	static final Logger log = LoggerFactory.getInstance("Framework");
+	static boolean mIsEnableBundleInstallWhenFindClass = false;
+	static Map<String, String> mMapForComAndBundles = new HashMap<String, String>();
 	static Properties properties;
-	static boolean restart;
-	static List<ServiceListenerEntry> serviceListeners;
-	static List<ServiceReference> services;
-	static int startlevel;
-	static List<BundleListener> syncBundleListeners;
+	static boolean restart = false;
+	static List<ServiceListenerEntry> serviceListeners = new ArrayList<ServiceListenerEntry>();
+	static List<ServiceReference> services = new ArrayList<ServiceReference>();
+	static int startlevel = 0;
+	static List<BundleListener> syncBundleListeners = new ArrayList<BundleListener>();
 	static SystemBundle systemBundle;
 	static ClassLoader systemClassLoader;
-	static List<String> writeAheads;
+	static List<String> writeAheads = new ArrayList<String>();
+
 
 	static final class ServiceListenerEntry implements EventListener {
 		final Filter filter;
@@ -634,25 +635,6 @@ public final class Framework {
 		return ((BundleImpl) mBundle);
 	}
 
-	static {
-		log = LoggerFactory.getInstance("Framework");
-		bundles = new ConcurrentHashMap();
-		services = new ArrayList();
-		classes_services = new HashMap();
-		bundleListeners = new ArrayList();
-		syncBundleListeners = new ArrayList();
-		serviceListeners = new ArrayList();
-		frameworkListeners = new ArrayList();
-		exportedPackages = new ConcurrentHashMap();
-		startlevel = 0;
-		writeAheads = new ArrayList();
-		initStartlevel = 1;
-		frameworkStartupShutdown = false;
-		restart = false;
-		mMapForComAndBundles = new HashMap();
-		mIsEnableBundleInstallWhenFindClass = false;
-		ADMIN_PERMISSION = new AdminPermission();
-	}
 
 	private Framework() {
 	}

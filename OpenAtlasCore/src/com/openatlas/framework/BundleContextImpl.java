@@ -224,7 +224,7 @@ public class BundleContextImpl implements BundleContext {
         ServiceReference serviceReference = null;
         checkValid();
         int i = -1;
-        long j = 5000;// MAlarmHandler.NEXT_FIRE_INTERVAL;
+		long j = 5000;
         List list = Framework.classes_services.get(clazz);
         if (list != null) {
             ServiceReference[] serviceReferenceArr = (ServiceReference[]) list

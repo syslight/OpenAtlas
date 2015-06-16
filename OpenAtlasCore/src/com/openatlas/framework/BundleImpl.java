@@ -382,13 +382,11 @@ public final class BundleImpl implements Bundle {
 	public synchronized void update() throws BundleException {
         String str = this.headers.get(Constants.BUNDLE_UPDATELOCATION);
         try {
-            String str2;
+
             if (str == null) {
-                str2 = this.location;
-            } else {
-                str2 = str;
-            }
-            update(new URL(str2).openConnection().getInputStream());
+				str = this.location;
+			}
+			update(new URL(str).openConnection().getInputStream());
         } catch (Throwable e) {
             throw new BundleException("Could not update " + toString()
                     + " from " + str, e);
