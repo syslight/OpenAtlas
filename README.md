@@ -1,12 +1,13 @@
 # OpenAtlas
 
 [![Join the chat at https://gitter.im/bunnyblue/OpenAtlas](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bunnyblue/OpenAtlas?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+ Build Status [![Build Status](https://travis-ci.org/bunnyblue/OpenAtlas.svg?branch=master)](https://travis-ci.org/bunnyblue/OpenAtlas)
+ Branch Status [![Build Status](https://travis-ci.org/bunnyblue/OpenAtlas.svg?branch=bunny)](https://travis-ci.org/bunnyblue/OpenAtlas)<br>
 OpenAtlas ,a Android Component Plugin Framework<br>The MIT License (MIT) Copyright (c) 2015 Bunny Blue,achellies<br>
-Build Status[![Build Status](https://travis-ci.org/bunnyblue/OpenAtlas.svg?branch=master)](https://travis-ci.org/bunnyblue/OpenAtlas)
-Branch Status[![Build Status](https://travis-ci.org/bunnyblue/OpenAtlas.svg?branch=bunny)](https://travis-ci.org/bunnyblue/OpenAtlas)<br>
 
 
-  <br>至于资源这块处理仁者见仁智者见智。代码遵循MIT License，目前使用patch aapt进行资源分区，虽然现在这个项目带有插件的名字，严格意义上说这个已经从插件里面出来了，跟系统一样管理各个组件，叫做component更合适。对于项目的分析，正在进行，有bug的话可以在issue里面提交。</br>
+
+  <br>代码遵循MIT License，目前使用patch aapt进行资源分区，虽然现在这个项目带有插件的名字，严格意义上说这个已经从插件里面出来了，跟系统一样管理各个组件，叫做component更合适。，有bug的话可以在issue里面提交。</br>
 
 ### Simple Project Moved to https://github.com/bunnyblue/OpenAtlasExt
 
