@@ -1,4 +1,6 @@
 # OpenAtlas
+
+[![Join the chat at https://gitter.im/bunnyblue/OpenAtlas](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bunnyblue/OpenAtlas?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 OpenAtlas ,a Android Component Plugin Framework<br>The MIT License (MIT) Copyright (c) 2015 Bunny Blue,achellies<br>
 Build Status[![Build Status](https://travis-ci.org/bunnyblue/OpenAtlas.svg?branch=master)](https://travis-ci.org/bunnyblue/OpenAtlas)
 Branch Status[![Build Status](https://travis-ci.org/bunnyblue/OpenAtlas.svg?branch=bunny)](https://travis-ci.org/bunnyblue/OpenAtlas)<br>
