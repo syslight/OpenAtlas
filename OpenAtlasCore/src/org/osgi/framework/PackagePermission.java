@@ -257,7 +257,7 @@ public final class PackagePermission extends BasicPermission
      */
 
     @Override
-	public boolean implies(Permission p)
+    public boolean implies(Permission p)
     {
         if (p instanceof PackagePermission)
         {
@@ -279,7 +279,7 @@ public final class PackagePermission extends BasicPermission
      */
 
     @Override
-	public String getActions()
+    public String getActions()
     {
         if (actions == null)
         {
@@ -311,7 +311,7 @@ public final class PackagePermission extends BasicPermission
      * @return A new <tt>PermissionCollection</tt> object.
      */
     @Override
-	public PermissionCollection newPermissionCollection()
+    public PermissionCollection newPermissionCollection()
     {
         return(new PackagePermissionCollection());
     }
@@ -327,7 +327,7 @@ public final class PackagePermission extends BasicPermission
      * same package name and actions as this <tt>PackagePermission</tt> object; <tt>false</tt> otherwise.
      */
     @Override
-	public boolean equals(Object obj)
+    public boolean equals(Object obj)
     {
         if (obj == this)
         {
@@ -352,7 +352,7 @@ public final class PackagePermission extends BasicPermission
      */
 
     @Override
-	public int hashCode()
+    public int hashCode()
     {
         return(getName().hashCode() ^ getActions().hashCode());
     }
@@ -447,7 +447,7 @@ final class PackagePermissionCollection extends PermissionCollection
      */
 
     @Override
-	public void add(Permission permission)
+    public void add(Permission permission)
     {
         if (! (permission instanceof PackagePermission))
             throw new IllegalArgumentException("invalid permission: "+
@@ -497,7 +497,7 @@ final class PackagePermissionCollection extends PermissionCollection
      */
 
     @Override
-	public boolean implies(Permission permission)
+    public boolean implies(Permission permission)
     {
         if (!(permission instanceof PackagePermission))
             return(false);
@@ -569,7 +569,7 @@ final class PackagePermissionCollection extends PermissionCollection
      */
 
     @Override
-	public Enumeration elements()
+    public Enumeration elements()
     {
         return(permissions.elements());
     }

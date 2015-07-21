@@ -1,27 +1,26 @@
 /**
  *  OpenAtlasForAndroid Project
-The MIT License (MIT) Copyright (OpenAtlasForAndroid) 2015 Bunny Blue,achellies
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software
-and associated documentation files (the "Software"), to deal in the Software 
-without restriction, including without limitation the rights to use, copy, modify, 
-merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies 
-or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-@author BunnyBlue
+ *  The MIT License (MIT)
+ *  Copyright (c) 2015 Bunny Blue
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ *  and associated documentation files (the "Software"), to deal in the Software
+ *  without restriction, including without limitation the rights to use, copy, modify,
+ *  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ *  permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all copies
+ *  or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ *  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ *  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ *  FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ *  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *  @author BunnyBlue
  * **/
-package com.openatlas.android.initializer;
 
-import java.util.ArrayList;
-import java.util.List;
+package com.openatlas.android.initializer;
 
 import android.content.Intent;
 
@@ -30,6 +29,9 @@ import com.openatlas.boot.PlatformConfigure;
 import com.openatlas.bundleInfo.BundleInfoList;
 import com.openatlas.bundleInfo.BundleListing.Component;
 import com.openatlas.runtime.ClassNotFoundInterceptorCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClassNotFoundInterceptor implements ClassNotFoundInterceptorCallback {
     public static final List<String> GO_H5_BUNDLES_IF_NOT_EXISTS;
@@ -54,8 +56,8 @@ public class ClassNotFoundInterceptor implements ClassNotFoundInterceptorCallbac
     }
 
     @SuppressWarnings("unused")
-	@Override
-	public Intent returnIntent(Intent intent) {
+    @Override
+    public Intent returnIntent(Intent intent) {
         Object obj = 1;
         Object obj2 = null;
         String className = intent.getComponent().getClassName();
@@ -102,7 +104,7 @@ public class ClassNotFoundInterceptor implements ClassNotFoundInterceptorCallbac
         }
 
         @Override
-		public void run() {
+        public void run() {
             Intent intent = new Intent();
             if (this.mIntent.getExtras() != null) {
                 intent.putExtras(this.mIntent.getExtras());

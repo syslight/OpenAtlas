@@ -39,10 +39,10 @@ import java.util.EventListener;
 
 public interface FrameworkListener extends EventListener {
 
-	/**
-	 * Receives notification of a general <code>FrameworkEvent</code> object.
-	 * 
-	 * @param event The <code>FrameworkEvent</code> object.
-	 */
-	public void frameworkEvent(FrameworkEvent event);
+    /**
+     * Receives notification of a general <code>FrameworkEvent</code> object.
+     *
+     * @param event The <code>FrameworkEvent</code> object.
+     */
+    public void frameworkEvent(FrameworkEvent event);
 }

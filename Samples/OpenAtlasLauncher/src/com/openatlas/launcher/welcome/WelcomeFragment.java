@@ -1,31 +1,25 @@
-/**OpenAtlasForAndroid Project
-
-The MIT License (MIT) 
-Copyright (c) 2015 Bunny Blue
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software
-and associated documentation files (the "Software"), to deal in the Software 
-without restriction, including without limitation the rights to use, copy, modify, 
-merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies 
-or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-@author BunnyBlue
-* **/
-package com.openatlas.launcher.welcome;
-
 /**
- * @author BunnyBlue
+ *  OpenAtlasForAndroid Project
+ *  The MIT License (MIT)
+ *  Copyright (c) 2015 Bunny Blue
  *
- */
-
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ *  and associated documentation files (the "Software"), to deal in the Software
+ *  without restriction, including without limitation the rights to use, copy, modify,
+ *  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ *  permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all copies
+ *  or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ *  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ *  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ *  FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ *  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *  @author BunnyBlue
+ * **/
+package com.openatlas.launcher.welcome;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -72,17 +66,15 @@ public class WelcomeFragment extends Fragment implements Callback {
     private View welcomSlogan;
 
     private class BundlesInstallBroadcastReceiver extends BroadcastReceiver {
-       
-
         private BundlesInstallBroadcastReceiver() {
             
         }
 
         @Override
-		public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, Intent intent) {
             try {
-            	WelcomeFragment.this.consumeFinish();
-            	WelcomeFragment.this.mHandler.sendEmptyMessage(WelcomeFragment.MSG_CONSUME_FINISH);
+                WelcomeFragment.this.consumeFinish();
+                WelcomeFragment.this.mHandler.sendEmptyMessage(WelcomeFragment.MSG_CONSUME_FINISH);
             } catch (Exception e) {
             }
         }
@@ -98,7 +90,7 @@ public class WelcomeFragment extends Fragment implements Callback {
     }
 
     @Override
-	public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View imageView = null;
        // super.onCreate(bundle);
         this.mHandler = new Handler(this);
@@ -109,37 +101,37 @@ public class WelcomeFragment extends Fragment implements Callback {
         PathView pathViewB = (PathView) viewGroup2.findViewById(R.id.pathViewB);
 //      final Path path = makeConvexArrow(50, 100);
 //      pathView.setPath(path);
-      pathView.setFillAfter(true);
-      pathView.useNaturalColors();
-      pathView.getPathAnimator().
-      delay(100).
-      duration(1500).
-      interpolator(new AccelerateDecelerateInterpolator()).
-      start();
-      pathViewJ.setFillAfter(true);
-      pathViewJ.useNaturalColors();
-      pathViewJ.getPathAnimator().
-      delay(100).
-      duration(1500).
-      interpolator(new AccelerateDecelerateInterpolator()).
-      start();
-      
-      pathViewT.setFillAfter(true);
-      pathViewT.useNaturalColors();
-      pathViewT.getPathAnimator().
-      delay(100).
-      duration(1500).
-      interpolator(new AccelerateDecelerateInterpolator()).
-      start();
-      
-      pathViewB.setFillAfter(true);
-      pathViewB.useNaturalColors();
-      pathViewB.getPathAnimator().
-      delay(100).
-      duration(1500).
-      interpolator(new AccelerateDecelerateInterpolator()).
-      start();
-      init();
+        pathView.setFillAfter(true);
+        pathView.useNaturalColors();
+        pathView.getPathAnimator().
+        delay(100).
+        duration(1500).
+        interpolator(new AccelerateDecelerateInterpolator()).
+        start();
+        pathViewJ.setFillAfter(true);
+        pathViewJ.useNaturalColors();
+        pathViewJ.getPathAnimator().
+        delay(100).
+        duration(1500).
+        interpolator(new AccelerateDecelerateInterpolator()).
+        start();
+
+        pathViewT.setFillAfter(true);
+        pathViewT.useNaturalColors();
+        pathViewT.getPathAnimator().
+        delay(100).
+        duration(1500).
+        interpolator(new AccelerateDecelerateInterpolator()).
+        start();
+
+        pathViewB.setFillAfter(true);
+        pathViewB.useNaturalColors();
+        pathViewB.getPathAnimator().
+        delay(100).
+        duration(1500).
+        interpolator(new AccelerateDecelerateInterpolator()).
+        start();
+        init();
         return viewGroup2;
  //  this.mBmStart = a.getInstance().getBootBitmap();
 //        if ((!Welcome.isAtlasDexopted()) ) {
@@ -200,6 +192,7 @@ public class WelcomeFragment extends Fragment implements Callback {
               //  this.pathViewArray[i].setPercentage(1.0f);
             }
         }
+
         if (VERSION.SDK_INT >= MSG_CONSUME_FINISH) {
             this.mHandler.sendEmptyMessageDelayed(MSG_SHOW_SLOGAN, 5500);
         }
@@ -230,16 +223,15 @@ public class WelcomeFragment extends Fragment implements Callback {
     }
 
     @Override
-	public void onResume() {
+    public void onResume() {
         super.onResume();
         if (this.firstResume) {
             this.firstResume = false;
-    
         }
     }
 
     @Override
-	public boolean handleMessage(Message message) {
+    public boolean handleMessage(Message message) {
         switch (message.what) {
             case MSG_CONSUME_FINISH /*11*/:
                 this.initFinish = true;
@@ -271,20 +263,11 @@ public class WelcomeFragment extends Fragment implements Callback {
     }
 
     @Override
-	public void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
-       
-
     }
 
-
-
-
-
-
     private void init() {
-      
-    	
         if ("flase".equals(System.getProperty("BUNDLES_INSTALLED", "flase"))) {
             this.atlasBroadCast = new BundlesInstallBroadcastReceiver();
             getActivity().registerReceiver(this.atlasBroadCast, new IntentFilter(PlatformConfigure.ACTION_BROADCAST_BUNDLES_INSTALLED));
@@ -293,11 +276,9 @@ public class WelcomeFragment extends Fragment implements Callback {
         } else {
             this.mHandler.sendEmptyMessageDelayed(MSG_CONSUME_FINISH, 600);
         }
-  
     }
 
-    public void consumeFinish() {
-       
+    public void consumeFinish() {       
         if (this.atlasBroadCast != null) {
             getActivity().unregisterReceiver(this.atlasBroadCast);
         }
@@ -306,23 +287,19 @@ public class WelcomeFragment extends Fragment implements Callback {
     }
 
     public void gotoMainActivity(boolean z) {
-    	System.out.println("WelcomeFragment.gotoMainActivity()");
+        System.out.println("WelcomeFragment.gotoMainActivity()");
       //  boolean z2 = false;.//com.openatlas.homelauncher.MainActivity
         if (getActivity()!=null&&Welcome.class==getActivity().getClass() ) {
 
-        	Intent mIntent=new Intent();
-    		mIntent.setClassName(getActivity(), "com.openatlas.homelauncher.MainActivity");
-    		startActivity(mIntent);
+            Intent mIntent=new Intent();
+            mIntent.setClassName(getActivity(), "com.openatlas.homelauncher.MainActivity");
+            startActivity(mIntent);
             Welcome.doLaunchoverUT();
             getActivity().finish();
         }else {
-			Log.e(getClass().getSimpleName()	, "getActivity() is null");
-		}
+            Log.e(getClass().getSimpleName()    , "getActivity() is null");
+        }
     }
-
-
-
-
 
     public void enterTaobao(View view) {
         if (this.initFinish) {

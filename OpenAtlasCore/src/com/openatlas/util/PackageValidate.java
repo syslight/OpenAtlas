@@ -1,24 +1,29 @@
 /**
  *  OpenAtlasForAndroid Project
-The MIT License (MIT) Copyright (OpenAtlasForAndroid) 2015 Bunny Blue,achellies
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software
-and associated documentation files (the "Software"), to deal in the Software 
-without restriction, including without limitation the rights to use, copy, modify, 
-merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies 
-or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-@author BunnyBlue
+ *  The MIT License (MIT)
+ *  Copyright (c) 2015 Bunny Blue
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ *  and associated documentation files (the "Software"), to deal in the Software
+ *  without restriction, including without limitation the rights to use, copy, modify,
+ *  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ *  permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all copies
+ *  or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ *  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ *  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ *  FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ *  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *  @author BunnyBlue
  * **/
 package com.openatlas.util;
+
+import android.content.pm.ApplicationInfo;
+import android.content.pm.Signature;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -33,24 +38,17 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.Signature;
-import android.util.Log;
-
 
 public class PackageValidate {
 
 
-
     public static final int INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION = -102;
-
 
     public static final int INSTALL_PARSE_FAILED_NO_CERTIFICATES = -103;
 
     public static final int INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES = -104;
 
     public static final int INSTALL_PARSE_FAILED_CERTIFICATE_ENCODING = -105;
-
 
     private static final boolean DEBUG_JAR = false;
 
@@ -84,32 +82,29 @@ public class PackageValidate {
 
     }
 
-    public static Certificate[] loadCertificates(JarFile jarFile, JarEntry je,
-                                           byte[] readBuffer) {
-		InputStream is = null;
+    public static Certificate[] loadCertificates(JarFile jarFile, JarEntry je, byte[] readBuffer) {
+        InputStream is = null;
         try {
             // We must read the stream for the JarEntry to retrieve
             // its certificates.
-			is = new BufferedInputStream(jarFile.getInputStream(je));
+            is = new BufferedInputStream(jarFile.getInputStream(je));
             while (is.read(readBuffer, 0, readBuffer.length) != -1) {
                 // not using
             }
 
             return je != null ? je.getCertificates() : null;
         } catch (IOException e) {
-            Log.w(TAG, "Exception reading " + je.getName() + " in "
-                    + jarFile.getName(), e);
+            Log.w(TAG, "Exception reading " + je.getName() + " in " + jarFile.getName(), e);
         } catch (RuntimeException e) {
-            Log.w(TAG, "Exception reading " + je.getName() + " in "
-                    + jarFile.getName(), e);
-		} finally {
-			if (is != null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+            Log.w(TAG, "Exception reading " + je.getName() + " in " + jarFile.getName(), e);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
         }
         return null;
@@ -138,7 +133,7 @@ public class PackageValidate {
     }
 
     public boolean collectCertificates() {
-    	Package pkg=parsePackage();
+        Package pkg=parsePackage();
         pkg.mSignatures = null;
 
         WeakReference<byte[]> readBufferRef;
@@ -157,10 +152,9 @@ public class PackageValidate {
 
         try {
             JarFile jarFile = new JarFile(mArchiveSourcePath);
-
             Certificate[] certs = null;
 
-          {
+            {
                 Enumeration<JarEntry> entries = jarFile.entries();
                 final Manifest manifest = jarFile.getManifest();
                 while (entries.hasMoreElements()) {
@@ -179,15 +173,11 @@ public class PackageValidate {
 
                     final Certificate[] localCerts = loadCertificates(jarFile, je, readBuffer);
                     if (DEBUG_JAR) {
-                        Log.i(TAG, "File " + mArchiveSourcePath + " entry " + je.getName()
-                                + ": certs=" + certs + " ("
-                                + (certs != null ? certs.length : 0) + ")");
+                        Log.i(TAG, "File " + mArchiveSourcePath + " entry " + je.getName() + ": certs=" + certs + " (" + (certs != null ? certs.length : 0) + ")");
                     }
 
                     if (localCerts == null) {
-                        Log.e(TAG, "Package " + pkg.packageName
-                                + " has no certificates at entry "
-                                + je.getName() + "; ignoring!");
+                        Log.e(TAG, "Package " + pkg.packageName + " has no certificates at entry " + je.getName() + "; ignoring!");
                         jarFile.close();
                         mParseError = INSTALL_PARSE_FAILED_NO_CERTIFICATES;
                         return false;
@@ -198,16 +188,14 @@ public class PackageValidate {
                         for (int i = 0; i < certs.length; i++) {
                             boolean found = false;
                             for (int j = 0; j < localCerts.length; j++) {
-                                if (certs[i] != null &&
-                                        certs[i].equals(localCerts[j])) {
+                                if (certs[i] != null && certs[i].equals(localCerts[j])) {
                                     found = true;
                                     break;
                                 }
                             }
+
                             if (!found || certs.length != localCerts.length) {
-                                Log.e(TAG, "Package " + pkg.packageName
-                                        + " has mismatched certificates at entry "
-                                        + je.getName() + "; ignoring!");
+                                Log.e(TAG, "Package " + pkg.packageName + " has mismatched certificates at entry " + je.getName() + "; ignoring!");
                                 jarFile.close();
                                 mParseError = INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES;
                                 return false;
@@ -226,12 +214,10 @@ public class PackageValidate {
                 final int N = certs.length;
                 pkg.mSignatures = new Signature[certs.length];
                 for (int i = 0; i < N; i++) {
-                    pkg.mSignatures[i] = new Signature(
-                            certs[i].getEncoded());
+                    pkg.mSignatures[i] = new Signature(certs[i].getEncoded());
                 }
             } else {
-                Log.e(TAG, "Package " + pkg.packageName
-                        + " has no certificates; ignoring!");
+                Log.e(TAG, "Package " + pkg.packageName + " has no certificates; ignoring!");
                 mParseError = INSTALL_PARSE_FAILED_NO_CERTIFICATES;
                 return false;
             }

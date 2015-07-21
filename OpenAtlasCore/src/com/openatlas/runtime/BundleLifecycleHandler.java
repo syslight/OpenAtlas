@@ -1,29 +1,25 @@
 /**
  *  OpenAtlasForAndroid Project
-The MIT License (MIT) Copyright (OpenAtlasForAndroid) 2015 Bunny Blue,achellies
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software
-and associated documentation files (the "Software"), to deal in the Software 
-without restriction, including without limitation the rights to use, copy, modify, 
-merge, publish, distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies 
-or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
-FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-@author BunnyBlue
+ *  The MIT License (MIT)
+ *  Copyright (c) 2015 Bunny Blue
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ *  and associated documentation files (the "Software"), to deal in the Software
+ *  without restriction, including without limitation the rights to use, copy, modify,
+ *  merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ *  permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all copies
+ *  or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ *  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ *  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+ *  FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ *  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *  @author BunnyBlue
  * **/
 package com.openatlas.runtime;
-
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.ServicePermission;
-import org.osgi.framework.SynchronousBundleListener;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -38,6 +34,11 @@ import com.openatlas.log.Logger;
 import com.openatlas.log.LoggerFactory;
 import com.openatlas.util.StringUtils;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.ServicePermission;
+import org.osgi.framework.SynchronousBundleListener;
+
 public class BundleLifecycleHandler implements SynchronousBundleListener {
     static final Logger log;
 
@@ -46,7 +47,7 @@ public class BundleLifecycleHandler implements SynchronousBundleListener {
         }
 
         @Override
-		protected Void doInBackground(Bundle... bundleArr) {
+        protected Void doInBackground(Bundle... bundleArr) {
             BundleLifecycleHandler.this.started(bundleArr[0]);
             return null;
         }
@@ -57,7 +58,7 @@ public class BundleLifecycleHandler implements SynchronousBundleListener {
     }
 
     @Override
-	@SuppressLint({ "NewApi" })
+    @SuppressLint({ "NewApi" })
     public void bundleChanged(BundleEvent bundleEvent) {
         switch (bundleEvent.getType()) {
         case BundleEvent.LOADED:
@@ -75,13 +76,10 @@ public class BundleLifecycleHandler implements SynchronousBundleListener {
             } else if (Framework.isFrameworkStartupShutdown()) {
                 BundleStartTask bundleStartTask = new BundleStartTask();
                 if (VERSION.SDK_INT > 11) {
-                    bundleStartTask.executeOnExecutor(
-                            AsyncTask.THREAD_POOL_EXECUTOR,
-                            new Bundle[] { bundleEvent.getBundle() });
+                    bundleStartTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, bundleEvent.getBundle());
                     return;
                 }
-                bundleStartTask
-                        .execute(new Bundle[] { bundleEvent.getBundle() });
+                bundleStartTask.execute(bundleEvent.getBundle());
             } else {
                 started(bundleEvent.getBundle());
             }
@@ -93,13 +91,12 @@ public class BundleLifecycleHandler implements SynchronousBundleListener {
             updated(bundleEvent.getBundle());
             break;
         case  BundleEvent.UNINSTALLED:
-        
-        {//TODO notice  plugin is uninstall !!!!
-        	Thread.currentThread().dumpStack();
-        	 uninstalled(bundleEvent.getBundle());
-        	
-        }
+            //TODO notice  plugin is uninstall !!!!
+            Thread.currentThread().dumpStack();
+            uninstalled(bundleEvent.getBundle());
+            break;
         default:
+            break;
         }
     }
 
@@ -111,20 +108,15 @@ public class BundleLifecycleHandler implements SynchronousBundleListener {
                     RuntimeVariables.androidApplication,
                     RuntimeVariables.getDelegateResources(),bundleImpl.getArchive().getArchiveFile().getAbsolutePath());
         } catch (Throwable e) {
-            log.error(
-                    "Could not load resource in bundle "
-                            + bundleImpl.getLocation(), e);
+            log.error("Could not load resource in bundle " + bundleImpl.getLocation(), e);
         }
+
         if (DelegateComponent.getPackage(bundle.getLocation()) == null) {
-            PackageLite parse = PackageLite.parse(bundleImpl.getArchive()
-                    .getArchiveFile());
-            log.info("Bundle installation info " + bundle.getLocation() + ":"
-                    + parse.components);
+            PackageLite parse = PackageLite.parse(bundleImpl.getArchive().getArchiveFile());
+            log.info("Bundle installation info " + bundle.getLocation() + ":" + parse.components);
             DelegateComponent.putPackage(bundle.getLocation(), parse);
         }
-        log.info("loaded() spend "
-                + (System.currentTimeMillis() - currentTimeMillis)
-                + " milliseconds");
+        log.info("loaded() spend " + (System.currentTimeMillis() - currentTimeMillis) + " milliseconds");
     }
 
     private void installed(Bundle bundle) {
@@ -155,23 +147,19 @@ public class BundleLifecycleHandler implements SynchronousBundleListener {
                     if (StringUtils.isNotEmpty(trim)) {
 
                         try {
-
-                            int i;
-                            for (Application newApplication2 : DelegateComponent.apkApplications
-                                    .values()) {
-                                if (newApplication2.getClass().getName()
-                                        .equals(trim)) {
+                            int i = 0;
+                            for (Application newApplication2 : DelegateComponent.apkApplications.values()) {
+                                if (newApplication2.getClass().getName().equals(trim)) {
                                     i = 1;
                                     break;
                                 }
                             }
+
                             i = 0;
                             if (i == 0) {
-                                Application newApplication2 = newApplication(
-                                        trim, bundleImpl.getClassLoader());
+                                Application newApplication2 = newApplication(trim, bundleImpl.getClassLoader());
                                 newApplication2.onCreate();
-                                DelegateComponent.apkApplications.put("system:"
-                                        + trim, newApplication2);
+                                DelegateComponent.apkApplications.put("system:" + trim, newApplication2);
                             }
                         } catch (Throwable th) {
                             log.error("Error to start application", th);
@@ -180,40 +168,34 @@ public class BundleLifecycleHandler implements SynchronousBundleListener {
                 }
             }
         } else {
-            PackageLite packageLite = DelegateComponent.getPackage(bundleImpl
-                    .getLocation());
+            PackageLite packageLite = DelegateComponent.getPackage(bundleImpl.getLocation());
             if (packageLite != null) {
                 String str2 = packageLite.applicationClassName;
                 if (StringUtils.isNotEmpty(str2)) {
                     try {
-                        newApplication(str2, bundleImpl.getClassLoader())
-                                .onCreate();
+                        newApplication(str2, bundleImpl.getClassLoader()).onCreate();
                     } catch (Throwable th2) {
                         log.error("Error to start application >>>", th2);
                     }
                 }
             }
         }
-        log.info("started() spend "
-                + (System.currentTimeMillis() - currentTimeMillis)
-                + " milliseconds");
+        log.info("started() spend " + (System.currentTimeMillis() - currentTimeMillis) + " milliseconds");
     }
 
-    protected static Application newApplication(String str,
-            ClassLoader classLoader) throws Exception {
+    protected static Application newApplication(String str, ClassLoader classLoader) throws Exception {
         Class loadClass = classLoader.loadClass(str);
         if (loadClass == null) {
             throw new ClassNotFoundException(str);
         }
+
         Application application = (Application) loadClass.newInstance();
-        OpenAtlasHacks.Application_attach.invoke(application,
-                RuntimeVariables.androidApplication);
+        OpenAtlasHacks.Application_attach.invoke(application, RuntimeVariables.androidApplication);
         return application;
     }
 
     private void stopped(Bundle bundle) {
-        Application application = DelegateComponent.apkApplications
-                .get(bundle.getLocation());
+        Application application = DelegateComponent.apkApplications.get(bundle.getLocation());
         if (application != null) {
             application.onTerminate();
             DelegateComponent.apkApplications.remove(bundle.getLocation());
@@ -225,11 +207,9 @@ public class BundleLifecycleHandler implements SynchronousBundleListener {
 
     private boolean isLewaOS() {
         try {
-            return StringUtils.isNotEmpty((String) Class
-                    .forName("android.os.SystemProperties")
-                    .getDeclaredMethod(ServicePermission.GET,
-                            new Class[] { String.class })
-                    .invoke(null, new Object[] { "ro.lewa.version" }));
+            return StringUtils.isNotEmpty((String) Class.forName("android.os.SystemProperties")
+                    .getDeclaredMethod(ServicePermission.GET, String.class)
+                    .invoke(null, "ro.lewa.version"));
         } catch (Exception e) {
             e.printStackTrace();
             return false;

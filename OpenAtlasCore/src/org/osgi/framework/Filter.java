@@ -42,72 +42,72 @@ import java.util.Dictionary;
  * @version $Revision: 6860 $
  */
 public interface Filter {
-	/**
-	 * Filter using a service's properties.
-	 * <p>
-	 * This <code>Filter</code> is executed using the keys and values of the
-	 * referenced service's properties. The keys are case insensitively matched
-	 * with this <code>Filter</code>.
-	 * 
-	 * @param reference The reference to the service whose properties are used
-	 *        in the match.
-	 * @return <code>true</code> if the service's properties match this
-	 *         <code>Filter</code>; <code>false</code> otherwise.
-	 */
-	public boolean match(ServiceReference reference);
+    /**
+     * Filter using a service's properties.
+     * <p>
+     * This <code>Filter</code> is executed using the keys and values of the
+     * referenced service's properties. The keys are case insensitively matched
+     * with this <code>Filter</code>.
+     *
+     * @param reference The reference to the service whose properties are used
+     *        in the match.
+     * @return <code>true</code> if the service's properties match this
+     *         <code>Filter</code>; <code>false</code> otherwise.
+     */
+    public boolean match(ServiceReference reference);
 
-	/**
-	 * Filter using a <code>Dictionary</code>. This <code>Filter</code> is
-	 * executed using the specified <code>Dictionary</code>'s keys and values.
-	 * The keys are case insensitively matched with this <code>Filter</code>.
-	 * 
-	 * @param dictionary The <code>Dictionary</code> whose keys are used in the
-	 *        match.
-	 * @return <code>true</code> if the <code>Dictionary</code>'s keys and
-	 *         values match this filter; <code>false</code> otherwise.
-	 * @throws IllegalArgumentException If <code>dictionary</code> contains case
-	 *         variants of the same key name.
-	 */
-	public boolean match(Dictionary dictionary);
+    /**
+     * Filter using a <code>Dictionary</code>. This <code>Filter</code> is
+     * executed using the specified <code>Dictionary</code>'s keys and values.
+     * The keys are case insensitively matched with this <code>Filter</code>.
+     *
+     * @param dictionary The <code>Dictionary</code> whose keys are used in the
+     *        match.
+     * @return <code>true</code> if the <code>Dictionary</code>'s keys and
+     *         values match this filter; <code>false</code> otherwise.
+     * @throws IllegalArgumentException If <code>dictionary</code> contains case
+     *         variants of the same key name.
+     */
+    public boolean match(Dictionary dictionary);
 
-	/**
-	 * Returns this <code>Filter</code>'s filter string.
-	 * <p>
-	 * The filter string is normalized by removing whitespace which does not
-	 * affect the meaning of the filter.
-	 * 
-	 * @return This <code>Filter</code>'s filter string.
-	 */
-	@Override
-	public String toString();
+    /**
+     * Returns this <code>Filter</code>'s filter string.
+     * <p>
+     * The filter string is normalized by removing whitespace which does not
+     * affect the meaning of the filter.
+     *
+     * @return This <code>Filter</code>'s filter string.
+     */
+    @Override
+    public String toString();
 
-	/**
-	 * Compares this <code>Filter</code> to another <code>Filter</code>.
-	 * 
-	 * <p>
-	 * This method returns the result of calling
-	 * <code>this.toString().equals(obj.toString())</code>.
-	 * 
-	 * @param obj The object to compare against this <code>Filter</code>.
-	 * @return If the other object is a <code>Filter</code> object, then returns
-	 *         the result of calling
-	 *         <code>this.toString().equals(obj.toString())</code>;
-	 *         <code>false</code> otherwise.
-	 */
-	@Override
-	public boolean equals(Object obj);
+    /**
+     * Compares this <code>Filter</code> to another <code>Filter</code>.
+     *
+     * <p>
+     * This method returns the result of calling
+     * <code>this.toString().equals(obj.toString())</code>.
+     *
+     * @param obj The object to compare against this <code>Filter</code>.
+     * @return If the other object is a <code>Filter</code> object, then returns
+     *         the result of calling
+     *         <code>this.toString().equals(obj.toString())</code>;
+     *         <code>false</code> otherwise.
+     */
+    @Override
+    public boolean equals(Object obj);
 
-	/**
-	 * Returns the hashCode for this <code>Filter</code>.
-	 * 
-	 * <p>
-	 * This method returns the result of calling
-	 * <code>this.toString().hashCode()</code>.
-	 * 
-	 * @return The hashCode of this <code>Filter</code>.
-	 */
-	@Override
-	public int hashCode();
+    /**
+     * Returns the hashCode for this <code>Filter</code>.
+     *
+     * <p>
+     * This method returns the result of calling
+     * <code>this.toString().hashCode()</code>.
+     *
+     * @return The hashCode of this <code>Filter</code>.
+     */
+    @Override
+    public int hashCode();
 
 
 }

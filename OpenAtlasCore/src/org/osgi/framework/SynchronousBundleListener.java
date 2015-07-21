@@ -48,5 +48,5 @@ package org.osgi.framework;
  */
 
 public interface SynchronousBundleListener extends BundleListener {
-	// This is a marker interface
+    // This is a marker interface
 }

@@ -49,10 +49,10 @@ import java.util.EventListener;
  */
 
 public interface ServiceListener extends EventListener {
-	/**
-	 * Receives notification that a service has had a lifecycle change.
-	 * 
-	 * @param event The <code>ServiceEvent</code> object.
-	 */
-	public void serviceChanged(ServiceEvent event);
+    /**
+     * Receives notification that a service has had a lifecycle change.
+     *
+     * @param event The <code>ServiceEvent</code> object.
+     */
+    public void serviceChanged(ServiceEvent event);
 }

@@ -49,51 +49,51 @@ package org.osgi.framework;
  */
 
 public interface ServiceFactory {
-	/**
-	 * Creates a new service object.
-	 * 
-	 * <p>
-	 * The Framework invokes this method the first time the specified
-	 * <code>bundle</code> requests a service object using the
-	 * <code>BundleContext.getService(ServiceReference)</code> method. The
-	 * service factory can then return a specific service object for each
-	 * bundle.
-	 * 
-	 * <p>
-	 * The Framework caches the value returned (unless it is <code>null</code>),
-	 * and will return the same service object on any future call to
-	 * <code>BundleContext.getService</code> for the same bundle. This means the
-	 * Framework must not allow this method to be concurrently called for the
-	 * same bundle.
-	 * 
-	 * <p>
-	 * The Framework will check if the returned service object is an instance of
-	 * all the classes named when the service was registered. If not, then
-	 * <code>null</code> is returned to the bundle.
-	 * 
-	 * @param bundle The bundle using the service.
-	 * @param registration The <code>ServiceRegistration</code> object for the
-	 *        service.
-	 * @return A service object that <strong>must</strong> be an instance of all
-	 *         the classes named when the service was registered.
-	 * @see BundleContext#getService
-	 */
-	public Object getService(Bundle bundle, ServiceRegistration registration);
+    /**
+     * Creates a new service object.
+     *
+     * <p>
+     * The Framework invokes this method the first time the specified
+     * <code>bundle</code> requests a service object using the
+     * <code>BundleContext.getService(ServiceReference)</code> method. The
+     * service factory can then return a specific service object for each
+     * bundle.
+     *
+     * <p>
+     * The Framework caches the value returned (unless it is <code>null</code>),
+     * and will return the same service object on any future call to
+     * <code>BundleContext.getService</code> for the same bundle. This means the
+     * Framework must not allow this method to be concurrently called for the
+     * same bundle.
+     *
+     * <p>
+     * The Framework will check if the returned service object is an instance of
+     * all the classes named when the service was registered. If not, then
+     * <code>null</code> is returned to the bundle.
+     *
+     * @param bundle The bundle using the service.
+     * @param registration The <code>ServiceRegistration</code> object for the
+     *        service.
+     * @return A service object that <strong>must</strong> be an instance of all
+     *         the classes named when the service was registered.
+     * @see BundleContext#getService
+     */
+    public Object getService(Bundle bundle, ServiceRegistration registration);
 
-	/**
-	 * Releases a service object.
-	 * 
-	 * <p>
-	 * The Framework invokes this method when a service has been released by a
-	 * bundle. The service object may then be destroyed.
-	 * 
-	 * @param bundle The bundle releasing the service.
-	 * @param registration The <code>ServiceRegistration</code> object for the
-	 *        service.
-	 * @param service The service object returned by a previous call to the
-	 *        <code>ServiceFactory.getService</code> method.
-	 * @see BundleContext#ungetService
-	 */
-	public void ungetService(Bundle bundle, ServiceRegistration registration,
-			Object service);
+    /**
+     * Releases a service object.
+     *
+     * <p>
+     * The Framework invokes this method when a service has been released by a
+     * bundle. The service object may then be destroyed.
+     *
+     * @param bundle The bundle releasing the service.
+     * @param registration The <code>ServiceRegistration</code> object for the
+     *        service.
+     * @param service The service object returned by a previous call to the
+     *        <code>ServiceFactory.getService</code> method.
+     * @see BundleContext#ungetService
+     */
+    public void ungetService(Bundle bundle, ServiceRegistration registration,
+            Object service);
 }

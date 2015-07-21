@@ -32,84 +32,84 @@ package org.osgi.framework;
  */
 
 public class InvalidSyntaxException extends Exception {
-	static final long		serialVersionUID	= -4295194420816491875L;
-	/**
-	 * The invalid filter string.
-	 */
-	private final String	filter;
+    static final long        serialVersionUID    = -4295194420816491875L;
+    /**
+     * The invalid filter string.
+     */
+    private final String    filter;
 
-	/**
-	 * Creates an exception of type <code>InvalidSyntaxException</code>.
-	 * 
-	 * <p>
-	 * This method creates an <code>InvalidSyntaxException</code> object with
-	 * the specified message and the filter string which generated the
-	 * exception.
-	 * 
-	 * @param msg The message.
-	 * @param filter The invalid filter string.
-	 */
-	public InvalidSyntaxException(String msg, String filter) {
-		super(msg);
-		this.filter = filter;
-	}
+    /**
+     * Creates an exception of type <code>InvalidSyntaxException</code>.
+     *
+     * <p>
+     * This method creates an <code>InvalidSyntaxException</code> object with
+     * the specified message and the filter string which generated the
+     * exception.
+     *
+     * @param msg The message.
+     * @param filter The invalid filter string.
+     */
+    public InvalidSyntaxException(String msg, String filter) {
+        super(msg);
+        this.filter = filter;
+    }
 
-	/**
-	 * Creates an exception of type <code>InvalidSyntaxException</code>.
-	 * 
-	 * <p>
-	 * This method creates an <code>InvalidSyntaxException</code> object with
-	 * the specified message and the filter string which generated the
-	 * exception.
-	 * 
-	 * @param msg The message.
-	 * @param filter The invalid filter string.
-	 * @param cause The cause of this exception.
-	 * @since 1.3
-	 */
-	public InvalidSyntaxException(String msg, String filter, Throwable cause) {
-		super(msg, cause);
-		this.filter = filter;
-	}
+    /**
+     * Creates an exception of type <code>InvalidSyntaxException</code>.
+     *
+     * <p>
+     * This method creates an <code>InvalidSyntaxException</code> object with
+     * the specified message and the filter string which generated the
+     * exception.
+     *
+     * @param msg The message.
+     * @param filter The invalid filter string.
+     * @param cause The cause of this exception.
+     * @since 1.3
+     */
+    public InvalidSyntaxException(String msg, String filter, Throwable cause) {
+        super(msg, cause);
+        this.filter = filter;
+    }
 
-	/**
-	 * Returns the filter string that generated the
-	 * <code>InvalidSyntaxException</code> object.
-	 * 
-	 * @return The invalid filter string.
-	 * @see BundleContext#getServiceReferences
-	 * @see BundleContext#addServiceListener(ServiceListener,String)
-	 */
-	public String getFilter() {
-		return filter;
-	}
+    /**
+     * Returns the filter string that generated the
+     * <code>InvalidSyntaxException</code> object.
+     *
+     * @return The invalid filter string.
+     * @see BundleContext#getServiceReferences
+     * @see BundleContext#addServiceListener(ServiceListener,String)
+     */
+    public String getFilter() {
+        return filter;
+    }
 
-	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
-	 * set.
-	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
-	 *         set.
-	 * @since 1.3
-	 */
-	@Override
-	public Throwable getCause() {
-		return super.getCause();
-	}
+    /**
+     * Returns the cause of this exception or <code>null</code> if no cause was
+     * set.
+     *
+     * @return The cause of this exception or <code>null</code> if no cause was
+     *         set.
+     * @since 1.3
+     */
+    @Override
+    public Throwable getCause() {
+        return super.getCause();
+    }
 
-	/**
-	 * Initializes the cause of this exception to the specified value.
-	 * 
-	 * @param cause The cause of this exception.
-	 * @return This exception.
-	 * @throws IllegalArgumentException If the specified cause is this
-	 *         exception.
-	 * @throws IllegalStateException If the cause of this exception has already
-	 *         been set.
-	 * @since 1.3
-	 */
-	@Override
-	public Throwable initCause(Throwable cause) {
-		return super.initCause(cause);
-	}
+    /**
+     * Initializes the cause of this exception to the specified value.
+     *
+     * @param cause The cause of this exception.
+     * @return This exception.
+     * @throws IllegalArgumentException If the specified cause is this
+     *         exception.
+     * @throws IllegalStateException If the cause of this exception has already
+     *         been set.
+     * @since 1.3
+     */
+    @Override
+    public Throwable initCause(Throwable cause) {
+        return super.initCause(cause);
+    }
 }

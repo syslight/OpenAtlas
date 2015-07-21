@@ -30,24 +30,24 @@ package org.osgi.framework;
  */
 @Deprecated
 public interface Configurable {
-	/**
-	 * Returns this service's configuration object.
-	 * 
-	 * <p>
-	 * Services implementing <code>Configurable</code> should take care when
-	 * returning a service configuration object since this object is probably
-	 * sensitive.
-	 * <p>
-	 * If the Java Runtime Environment supports permissions, it is recommended
-	 * that the caller is checked for some appropriate permission before
-	 * returning the configuration object.
-	 * 
-	 * @return The configuration object for this service.
-	 * @throws SecurityException If the caller does not have an
-	 *         appropriate permission and the Java Runtime Environment supports
-	 *         permissions.
-	 * @deprecated As of 1.2. Please use Configuration Admin service.
-	 */
-	@Deprecated
-	public Object getConfigurationObject();
+    /**
+     * Returns this service's configuration object.
+     *
+     * <p>
+     * Services implementing <code>Configurable</code> should take care when
+     * returning a service configuration object since this object is probably
+     * sensitive.
+     * <p>
+     * If the Java Runtime Environment supports permissions, it is recommended
+     * that the caller is checked for some appropriate permission before
+     * returning the configuration object.
+     *
+     * @return The configuration object for this service.
+     * @throws SecurityException If the caller does not have an
+     *         appropriate permission and the Java Runtime Environment supports
+     *         permissions.
+     * @deprecated As of 1.2. Please use Configuration Admin service.
+     */
+    @Deprecated
+    public Object getConfigurationObject();
 }

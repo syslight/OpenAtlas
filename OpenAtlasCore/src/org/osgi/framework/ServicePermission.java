@@ -239,7 +239,7 @@ final public class ServicePermission extends BasicPermission
      */
 
     @Override
-	public boolean implies(Permission p)
+    public boolean implies(Permission p)
     {
         if (p instanceof ServicePermission)
         {
@@ -259,7 +259,7 @@ final public class ServicePermission extends BasicPermission
      * @return The canonical string representation of the actions.
      */
     @Override
-	public String getActions()
+    public String getActions()
     {
         if (actions == null)
         {
@@ -292,7 +292,7 @@ final public class ServicePermission extends BasicPermission
      * <tt>ServicePermission</tt> objects.
      */
     @Override
-	public PermissionCollection newPermissionCollection()
+    public PermissionCollection newPermissionCollection()
     {
         return (new ServicePermissionCollection());
     }
@@ -308,7 +308,7 @@ final public class ServicePermission extends BasicPermission
      * same class name and actions as this <tt>ServicePermission</tt> object; <tt>false</tt> otherwise.
      */
     @Override
-	public boolean equals(Object obj)
+    public boolean equals(Object obj)
     {
         if (obj == this)
         {
@@ -333,7 +333,7 @@ final public class ServicePermission extends BasicPermission
      */
 
     @Override
-	public int hashCode()
+    public int hashCode()
     {
         return(getName().hashCode() ^ getActions().hashCode());
     }
@@ -426,7 +426,7 @@ final class ServicePermissionCollection extends PermissionCollection
      */
 
     @Override
-	public void add(Permission permission)
+    public void add(Permission permission)
     {
         if (! (permission instanceof ServicePermission))
             throw new IllegalArgumentException("invalid permission: "+
@@ -475,7 +475,7 @@ final class ServicePermissionCollection extends PermissionCollection
      */
 
     @Override
-	public boolean implies(Permission permission)
+    public boolean implies(Permission permission)
     {
         if (!(permission instanceof ServicePermission))
             return (false);
@@ -547,7 +547,7 @@ final class ServicePermissionCollection extends PermissionCollection
      */
 
     @Override
-	public Enumeration elements()
+    public Enumeration elements()
     {
         return (permissions.elements());
     }
